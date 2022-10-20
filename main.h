@@ -4,7 +4,7 @@
 /* type defs */
 typedef unsigned char          uint8_t;
 typedef unsigned short int     uint16_t;
-typedef unsigned long           uint32_t;
+typedef unsigned long int      uint32_t;
 
 /* bit values */
 #define HIGH        0x1
@@ -14,18 +14,18 @@ typedef unsigned long           uint32_t;
 #define SET_BIT(arg)                       arg |= HIGH
 #define CLEAR_BIT(arg)                     arg &= LOW
 
-#define SET_BIT_FIELD(arg, value)          arg |= value
+#define SET_BIT_FIELD(arg, value)          arg = value
 
 /* General-Purpose Input/Output Run Mode Clock Gating Control */
 typedef struct
 {
-	uint32_t Reserved      :26;
-	uint32_t PORTF_CLK     :1;
-	uint32_t PORTE_CLK     :1;
-	uint32_t PORTD_CLK     :1;
-	uint32_t PORTC_CLK     :1;
-	uint32_t PORTB_CLK     :1;
 	uint32_t PORTA_CLK     :1;
+	uint32_t PORTB_CLK     :1;
+	uint32_t PORTC_CLK     :1;
+	uint32_t PORTD_CLK     :1;
+	uint32_t PORTE_CLK     :1;
+	uint32_t PORTF_CLK     :1;
+	uint32_t Reserved      :26;
 }RCGCGPIO_BF;
 
 typedef union
@@ -45,8 +45,8 @@ typedef union
 /* GPIO Data */
 typedef struct
 {
-	uint32_t Reserved      :24;
 	uint32_t DATA          :8;
+	uint32_t Reserved      :24;
 }GPIODATA_BF;
 
 typedef union
@@ -62,8 +62,8 @@ typedef union
 /* GPIO Direction */
 typedef struct
 {
+	uint32_t DIR           :8;
 	uint32_t Reserved      :24;
-	uint32_t DIR          :8;
 }GPIODIR_BF;
 
 typedef union
@@ -79,8 +79,8 @@ typedef union
 /* GPIO Digital Enable */
 typedef struct
 {
+	uint32_t DEN           :8;
 	uint32_t Reserved      :24;
-	uint32_t DEN          :8;
 }GPIODEN_BF;
 
 typedef union
