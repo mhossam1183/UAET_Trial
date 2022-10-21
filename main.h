@@ -57,7 +57,9 @@ typedef union
 
 #define GPIO_PORTF_GPIODATA_OFFSET     0x000
 
-#define GPIO_PORTF_GPIODATA_R          ( * ( (volatile GPIODATA_Tag *) (GPIO_PORTF_BASE_ADDRESS + GPIO_PORTF_GPIODATA_OFFSET) ) )
+#define GPIO_PF3_BIT_MASK     0x20
+
+#define GPIO_PORTF_GPIODATA_R          ( * ( (volatile GPIODATA_Tag *) (GPIO_PORTF_BASE_ADDRESS + GPIO_PORTF_GPIODATA_OFFSET + GPIO_PF3_BIT_MASK) ) )
 
 /* GPIO Direction */
 typedef struct
