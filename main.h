@@ -11,10 +11,13 @@ typedef unsigned long int      uint32_t;
 #define LOW         0x0
 
 /* helper macros */
-#define SET_BIT(arg)                       arg |= HIGH
-#define CLEAR_BIT(arg)                     arg &= LOW
+#define SET_BIT(arg)                               arg |= HIGH
+#define CLEAR_BIT(arg)                             arg &= LOW
 
-#define SET_BIT_FIELD(arg, value)          arg = value
+#define SET_BIT_FIELD_VALUE(arg, value)            arg |= value
+
+#define FORCE_BIT_FIELD_VALUE(arg, value)          arg = value
+#define CLEAR_BIT_FIELD(arg)                       arg &= 0x00000000
 
 /* General-Purpose Input/Output Run Mode Clock Gating Control */
 typedef struct
@@ -55,9 +58,11 @@ typedef union
 	GPIODATA_BF  B;
 }GPIODATA_Tag;
 
-#define GPIO_PORTF_GPIODATA_OFFSET     0x000
+#define GPIO_PORTF_GPIODATA_OFFSET      0x000
 
-#define GPIO_PF3_BIT_MASK     0x20
+#define GPIO_PF3_BIT_MASK               0x20
+
+#define GPIO_PF3_ENABLE                 0x8
 
 #define GPIO_PORTF_GPIODATA_R          ( * ( (volatile GPIODATA_Tag *) (GPIO_PORTF_BASE_ADDRESS + GPIO_PORTF_GPIODATA_OFFSET + GPIO_PF3_BIT_MASK) ) )
 
