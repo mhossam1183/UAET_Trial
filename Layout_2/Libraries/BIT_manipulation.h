@@ -1,36 +1,34 @@
-#ifndef BIT_MANIPULATION_H_
-#define BIT_MANIPULATION_H_
+/**********************************************************************************************************************
 
-/****************************************************************************/
-/*                                                                          */
-/*                       BIT Manipulation for GPIO                          */
-/*                                                                          */
-/****************************************************************************/
+ *  FILE DESCRIPTION
+ *  -------------------------------------------------------------------------------------------------------------------
+ *         File:  <Bit_Manipulation.h>
+ *       Module:  -
+ *
+ *  Description:  <Bit Manipulation helper macros>     
+ *  
+ *********************************************************************************************************************/
+#ifndef BIT_MANIPULATION_H
+#define BIT_MANIPULATION_H
 
-#define GPIO_SET(reg,bit)    ( *(reg) |=  (1 << bit) )
-#define GPIO_CLEAR(reg,bit)  ( *(reg) &= ~(1 << bit) )
-#define GPIO_TOGGLE(reg,bit) ( *(reg) ^=  (1 << bit) )
-#define GPIO_IS_SET(reg,bit) ((*(reg) & (1 << bit)) >> bit)
+/**********************************************************************************************************************
+ *  GLOBAL CONSTANT MACROS
+ *********************************************************************************************************************/
+/* bit values */
+#define HIGH        0x1
+#define LOW         0x0
 
-/****************************************************************************/
-/*                                                                          */
-/*                        BIT Manipulation for registers                    */
-/*                                                                          */
-/****************************************************************************/
+/* helper macros */
+#define SET_BIT(arg)                               arg |= HIGH
+#define CLEAR_BIT(arg)                             arg &= LOW
 
-#define BIT_SET(reg,bit)    ( (reg) |=  (1 << bit) )
-#define BIT_CLEAR(reg,bit)  ( (reg) &= ~(1 << bit) )
-#define BIT_TOGGLE(reg,bit) ( (reg) ^=  (1 << bit) )
-#define BIT_IS_SET(reg,bit) (((reg) & (1 << bit)) >> bit)
+#define SET_BIT_FIELD_VALUE(arg, value)            arg |= value
 
-/****************************************************************************/
-/*                                                                          */
-/*                        Register Manipulation                             */
-/*                                                                          */
-/****************************************************************************/
+#define FORCE_BIT_FIELD_VALUE(arg, value)          arg = value
+#define CLEAR_BIT_FIELD(arg)                       arg &= 0x00000000
 
-#define REG_SET(reg,val) ( (reg) |= (val)   )
-#define REG_CLEAR(reg)   ( (reg) |= (0x00)  )
+#endif  /* BIT_MANIPULATION_H */
 
-
-#endif 
+/**********************************************************************************************************************
+ *  END OF FILE: Bit_Manipulation.h
+ *********************************************************************************************************************/

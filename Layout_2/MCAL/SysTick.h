@@ -2,14 +2,14 @@
 
  *  FILE DESCRIPTION
  *  -------------------------------------------------------------------------------------------------------------------
- *         File:  <GPIO.h>
+ *         File:  <SysTick.h>
  *       Module:  -
  *
- *  Description:  <General-Purpose Input/Outputs definitions>     
+ *  Description:  <System Timer (SysTick) Register definitions>     
  *  
  *********************************************************************************************************************/
-#ifndef GPIO_H
-#define GPIO_H
+#ifndef SYSTICK_H
+#define SYSTICK_H
 
 /**********************************************************************************************************************
  * INCLUDES
@@ -20,66 +20,66 @@
  *  GLOBAL CONSTANT MACROS
  *********************************************************************************************************************/
 
-/* GPIO PORTF base address */
-#define GPIO_PORTF_BASE_ADDRESS             0x40025000
+/* Core Peripherals base address */
+#define CORE_PPH_BASE_ADDRESS             0xE000E000
 
-/* GPIO Data */
+/* SysTick Control Register */
 typedef struct
 {
-	uint32_t DATA          :8;
-	uint32_t Reserved      :24;
-}GPIODATA_BF;
+	uint32_t ENABLE        :1;
+	uint32_t INTEN         :1;
+	uint32_t CLK_SRC       :1;
+	uint32_t Reserved      :13;
+	uint32_t COUNT         :1;
+	uint32_t Reserved_2      :15;
+}STCTRL_BF;
 
 typedef union
 {
 	uint32_t     R;
-	GPIODATA_BF  B;
-}GPIODATA_Tag;
+	STCTRL_BF  B;
+}STCTRL_Tag;
 
-#define GPIO_PORTF_GPIODATA_OFFSET      0x000
+#define CORE_PPH_STCTRL_OFFSET     0x010
 
-#define GPIO_PF3_BIT_MASK               0x20
+#define CORE_PPH_STCTRL_R          \
+( * ( (volatile STCTRL_Tag *) (CORE_PPH_BASE_ADDRESS + CORE_PPH_STCTRL_OFFSET) ) )
 
-#define GPIO_PF3_ENABLE                 0x8
-
-#define GPIO_PORTF_GPIODATA_R          \
-( * ( (volatile GPIODATA_Tag *) (GPIO_PORTF_BASE_ADDRESS + GPIO_PORTF_GPIODATA_OFFSET + GPIO_PF3_BIT_MASK) ) )
-
-/* GPIO Direction */
+/* SysTick Reload Value Register */
 typedef struct
 {
-	uint32_t DIR           :8;
-	uint32_t Reserved      :24;
-}GPIODIR_BF;
+	uint32_t RELOAD        :24;
+	uint32_t Reserved      :8;
+}STRELOAD_BF;
 
 typedef union
 {
 	uint32_t     R;
-	GPIODIR_BF  B;
-}GPIODIR_Tag;
+	STRELOAD_BF  B;
+}STRELOAD_Tag;
 
-#define GPIO_PORTF_GPIODIR_OFFSET     0x400
+#define CORE_PPH_STRELOAD_OFFSET     0x014
 
-#define GPIO_PORTF_GPIODIR_R          \
-( * ( (volatile GPIODIR_Tag *) (GPIO_PORTF_BASE_ADDRESS + GPIO_PORTF_GPIODIR_OFFSET) ) )
+#define CORE_PPH_STRELOAD_R          \
+( * ( (volatile STRELOAD_Tag *) (CORE_PPH_BASE_ADDRESS + CORE_PPH_STRELOAD_OFFSET) ) )
 
-/* GPIO Digital Enable */
+/* SysTick Current Value Register */
 typedef struct
 {
-	uint32_t DEN           :8;
-	uint32_t Reserved      :24;
-}GPIODEN_BF;
+	uint32_t CURRENT        :24;
+	uint32_t Reserved      :8;
+}STCURRENT_BF;
 
 typedef union
 {
 	uint32_t     R;
-	GPIODEN_BF  B;
-}GPIODEN_Tag;
+	STCURRENT_BF  B;
+}STCURRENT_Tag;
 
-#define GPIO_PORTF_GPIODEN_OFFSET     0x51C
+#define CORE_PPH_STCURRENT_OFFSET     0x018
 
-#define GPIO_PORTF_GPIODEN_R          \
-( * ( (volatile GPIODEN_Tag *) (GPIO_PORTF_BASE_ADDRESS + GPIO_PORTF_GPIODEN_OFFSET) ) )
+#define CORE_PPH_STCURRENT_R          \
+( * ( (volatile STCURRENT_Tag *) (CORE_PPH_BASE_ADDRESS + CORE_PPH_STCURRENT_OFFSET) ) )
 
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION MACROS
@@ -101,8 +101,8 @@ typedef union
  *********************************************************************************************************************/
 
  
-#endif  /* GPIO_H */
+#endif  /* SYSTICK_H */
 
 /**********************************************************************************************************************
- *  END OF FILE: GPIO.h
+ *  END OF FILE: SysTick.h
  *********************************************************************************************************************/
