@@ -3,11 +3,33 @@
 #include "./MCAL/GPIO.h"
 #include "./MCAL/SysCtrl.h"
 #include "./MCAL/SysTick.h"
+#include "./MCAL/Timer.h"
 
-extern void SysTick_Handler(void);
+#define Vectors_Size 155
+
+extern void Function_1(void);
+
+void Function_1(void)
+{
+	GPIO_PORTF_GPIODATA_R.B.DATA ^= GPIO_PF3_ENABLE;
+}
+
+static uint32_t Vector_Table_RAM[1] __attribute__((aligned(1024)));
+
+static uint32_t * var1 = 0;
+
+static uint32_t * var2 = 0;
 
 int main(void)
 {
+	var1 = (uint32_t *)(CORE_PPH_VTABLE_R.R + 0x003C);
+	
+	CORE_PPH_VTABLE_R.R = (uint32_t)&Vector_Table_RAM;
+	
+	var2 = (uint32_t *)(CORE_PPH_VTABLE_R.R + 0x003C);
+	
+	*var2 = &Function_1;
+	
 	SET_BIT(SYSTEM_CTRL_RCGCGPIO_R.B.PORTF_CLK);
 	
 	SET_BIT_FIELD_VALUE(GPIO_PORTF_GPIODEN_R.B.DEN, GPIO_PF3_ENABLE);
@@ -30,9 +52,4 @@ int main(void)
 		{
 			//SET_BIT_FIELD_VALUE(GPIO_PORTF_GPIODATA_R.B.DATA, GPIO_PF3_ENABLE);
 		}
-}
-
-void SysTick_Handler(void)
-{
-	GPIO_PORTF_GPIODATA_R.B.DATA ^= GPIO_PF3_ENABLE;
 }
