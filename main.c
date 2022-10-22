@@ -1,5 +1,7 @@
 #include "main.h"
 
+extern void SysTick_Handler(void);
+
 int main(void)
 {
 	SET_BIT(SYSTEM_CTRL_RCGCGPIO_R.B.PORTF_CLK);
