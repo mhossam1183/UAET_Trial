@@ -1,4 +1,8 @@
-#include "main.h"
+#include "./Libraries/Bit_Manipulation.h"
+#include "./Libraries/STD_types.h"
+#include "./MCAL/GPIO.h"
+#include "./MCAL/SysCtrl.h"
+#include "./MCAL/SysTick.h"
 
 extern void SysTick_Handler(void);
 
