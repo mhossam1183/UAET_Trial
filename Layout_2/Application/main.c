@@ -1,9 +1,9 @@
-#include "./Libraries/Bit_Manipulation.h"
-#include "./Libraries/STD_types.h"
-#include "./MCAL/GPIO.h"
-#include "./MCAL/SysCtrl.h"
-#include "./MCAL/SysTick.h"
-#include "./MCAL/Interrupt.h"
+#include "../Libraries/Bit_Manipulation.h"
+#include "../Libraries/STD_types.h"
+#include "../MCAL/GPIO.h"
+#include "../MCAL/SysCtrl.h"
+#include "../MCAL/SysTick.h"
+#include "../MCAL/Interrupt.h"
 
 extern void SysTick_User_Activity(void);
 
