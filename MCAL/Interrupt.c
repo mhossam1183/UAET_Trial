@@ -19,6 +19,8 @@
 *********************************************************************************************************************/
 #define SYSTICK_IRQ_NUMBER        15
 
+#define TIMER1A_IRQ_NUMBER        37
+
 /**********************************************************************************************************************
  *  LOCAL DATA 
  *********************************************************************************************************************/
@@ -80,6 +82,21 @@ void Init_RAM_Vector_Table(void)
 void Set_SysTick_CallBack(void (* Fun_Handler)(void))
 {
 	Vector_Table_RAM[SYSTICK_IRQ_NUMBER] = Fun_Handler;
+}
+
+/******************************************************************************
+* \Syntax          : void Init_RAM_Vector_Table(void)        
+* \Description     : init ram vtable                                    
+*                                                                             
+* \Sync\Async      : Asynchronous                                               
+* \Reentrancy      : Non Reentrant                                             
+* \Parameters (in) : None                     
+* \Parameters (out): None                                                      
+* \Return value:   : None                                  
+*******************************************************************************/
+void Set_TIMER1A_CallBack(void (* Fun_Handler)(void))
+{
+	Vector_Table_RAM[TIMER1A_IRQ_NUMBER] = Fun_Handler;
 }
 
 /******************************************************************************

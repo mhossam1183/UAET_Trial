@@ -13,6 +13,7 @@
  *  INCLUDES
  *********************************************************************************************************************/
 #include "Timer.h"
+#include "../Libraries/Bit_Manipulation.h"
 
 /**********************************************************************************************************************
 *  LOCAL MACROS CONSTANT\FUNCTION
@@ -50,7 +51,25 @@
 *******************************************************************************/
 void Init_GPT_Timer1A(void)
 {
+	SET_BIT(SYSTEM_CTRL_RCGCTIMER_R.B.R1);
 	
+	SET_BIT_FIELD_VALUE(GPTM_TIMER1_GPTMCTL_R.R, 0x0);
+	
+	SET_BIT_FIELD_VALUE(GPTM_TIMER1_GPTMCFG_R.R, 0x4);
+	
+	SET_BIT_FIELD_VALUE(GPTM_TIMER1_GPTMTAMR_R.R, 0x2);
+	
+	SET_BIT_FIELD_VALUE(GPTM_TIMER1_GPTMTAPR_R.R, 0xFF);
+	
+	SET_BIT_FIELD_VALUE(GPTM_TIMER1_GPTMTAILR_R.R, 0xFFFF);
+	
+	SET_BIT_FIELD_VALUE(GPTM_TIMER1_GPTMICR_R.R, 0x1);
+	
+	SET_BIT(GPTM_TIMER1_GPTMIMR_R.B.TATOIM);
+	
+	SET_BIT(GPTM_TIMER1_GPTMCTL_R.B.TAEN);
+	
+	NVIC_EN0_R.B.INT |= (0x1 << 21);
 }
 
 /******************************************************************************
