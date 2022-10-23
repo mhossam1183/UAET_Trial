@@ -2,44 +2,50 @@
 
  *  FILE DESCRIPTION
  *  -------------------------------------------------------------------------------------------------------------------
- *         File:  <Interrupt.h>
+ *         File:  <Timer.h>
  *       Module:  -
  *
- *  Description:  <Interrupt definitions>     
+ *  Description:  <Timer definitions>     
  *  
  *********************************************************************************************************************/
-#ifndef INTERRUPT_H
-#define INTERRUPT_H
+#ifndef TIMER_H
+#define TIMER_H
 
 /**********************************************************************************************************************
  * INCLUDES
  *********************************************************************************************************************/
 #include "../Libraries/STD_types.h"
-#include "SysTick.h"
+#include "SysCtrl.h"
 
 /**********************************************************************************************************************
  *  GLOBAL CONSTANT MACROS
  *********************************************************************************************************************/
 
-#define VECTOR_TABLE_SIZE 155
-
-/* Vector Table Offset */
+/* 16/32-Bit General-Purpose Timer Run Mode Clock Gating Control */
 typedef struct
 {
-	uint32_t Reserved      :10;
-	uint32_t OFFSET        :22;
-}VTABLE_BF;
+	uint32_t R0              :1;
+	uint32_t R1              :1;
+	uint32_t R2              :1;
+	uint32_t R3              :1;
+	uint32_t R4              :1;
+	uint32_t R5              :1;
+	uint32_t Reserved        :26;
+}RCGCTIMER_BF;
 
 typedef union
 {
 	uint32_t     R;
-	VTABLE_BF  B;
-}VTABLE_Tag;
+	RCGCTIMER_BF  B;
+}RCGCTIMER_Tag;
 
-#define CORE_PPH_VTABLE_OFFSET     0xD08
+#define SYSTEM_CTRL_RCGCTIMER_OFFSET     0x604
 
-#define CORE_PPH_VTABLE_R          \
-( * ( (volatile VTABLE_Tag *) (CORE_PPH_BASE_ADDRESS + CORE_PPH_VTABLE_OFFSET) ) )
+#define SYSTEM_CTRL_RCGCTIMER_R          \
+( * ( (volatile RCGCTIMER_Tag *) (SYSTEM_CTRL_BASE_ADDRESS + SYSTEM_CTRL_RCGCTIMER_OFFSET) ) )
+
+
+
 
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION MACROS
@@ -59,14 +65,10 @@ typedef union
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION PROTOTYPES
  *********************************************************************************************************************/
-extern void Init_RAM_Vector_Table(void);
+extern void Init_GPT_Timer1A(void);
 
-extern void Set_SysTick_CallBack(void (* Fun_Handler)(void));
-
-extern void Set_Timer1A_CallBack(void (* Fun_Handler)(void));
- 
-#endif  /* INTERRUPT_H */
+#endif  /* TIMER_H */
 
 /**********************************************************************************************************************
- *  END OF FILE: Interrupt.h
+ *  END OF FILE: Timer.h
  *********************************************************************************************************************/
