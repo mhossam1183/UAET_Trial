@@ -4,8 +4,9 @@
 #include "../MCAL/SysCtrl.h"
 #include "../MCAL/SysTick.h"
 #include "../MCAL/Interrupt.h"
+#include "../MCAL/Timer.h"
 
-extern void SysTick_User_Activity(void);
+extern void TIMER1A_User_Activity(void);
 
 int main(void)
 {
@@ -18,26 +19,21 @@ int main(void)
 	
 	Init_RAM_Vector_Table();
 	
-	Set_SysTick_CallBack(SysTick_User_Activity);
+	Set_TIMER1A_CallBack(TIMER1A_User_Activity);
 	
-	SET_BIT_FIELD_VALUE(CORE_PPH_STCURRENT_R.B.CURRENT, 0x0);
 	
-	SET_BIT_FIELD_VALUE(CORE_PPH_STRELOAD_R.B.RELOAD, 15999999);
-	
-	SET_BIT(CORE_PPH_STCTRL_R.B.CLK_SRC);
-	
-	SET_BIT(CORE_PPH_STCTRL_R.B.INTEN);
-	
-	SET_BIT(CORE_PPH_STCTRL_R.B.ENABLE);
+	Init_GPT_Timer1A();
 	
 	/* Super Loop */
 	while(1)
 		{
-			//SET_BIT_FIELD_VALUE(GPIO_PORTF_GPIODATA_R.B.DATA, GPIO_PF3_ENABLE);
+			
 		}
 }
 
-void SysTick_User_Activity(void)
+void TIMER1A_User_Activity(void)
 {
 	GPIO_PORTF_GPIODATA_R.B.DATA ^= GPIO_PF3_ENABLE;
+	
+	SET_BIT_FIELD_VALUE(GPTM_TIMER1_GPTMICR_R.R, 0x1);
 }

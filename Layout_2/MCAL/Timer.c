@@ -1,10 +1,10 @@
 /**********************************************************************************************************************
  *  FILE DESCRIPTION
  *  -----------------------------------------------------------------------------------------------------------------*/
-/**        \file  Interrupt.c
+/**        \file  Timer.c
  *        \brief  
  *
- *      \details  <Interrupt definitions>
+ *      \details  <Timer definitions>
  *
  *
  *********************************************************************************************************************/
@@ -12,19 +12,17 @@
 /**********************************************************************************************************************
  *  INCLUDES
  *********************************************************************************************************************/
-#include "Interrupt.h"
+#include "Timer.h"
+#include "../Libraries/Bit_Manipulation.h"
 
 /**********************************************************************************************************************
 *  LOCAL MACROS CONSTANT\FUNCTION
 *********************************************************************************************************************/
-#define SYSTICK_IRQ_NUMBER        15
-
-#define TIMER1A_IRQ_NUMBER        37
 
 /**********************************************************************************************************************
  *  LOCAL DATA 
  *********************************************************************************************************************/
-static void (* Vector_Table_RAM[VECTOR_TABLE_SIZE])(void) __attribute__((aligned(1024)));
+
 
 /**********************************************************************************************************************
  *  GLOBAL DATA
@@ -42,8 +40,8 @@ static void (* Vector_Table_RAM[VECTOR_TABLE_SIZE])(void) __attribute__((aligned
  *  GLOBAL FUNCTIONS
  *********************************************************************************************************************/
 /******************************************************************************
-* \Syntax          : void Init_RAM_Vector_Table(void)        
-* \Description     : init ram vtable                                    
+* \Syntax          : void Init_GPT_Timer1A(void)        
+* \Description     : init GPT timer1A                                   
 *                                                                             
 * \Sync\Async      : Asynchronous                                               
 * \Reentrancy      : Non Reentrant                                             
@@ -51,52 +49,27 @@ static void (* Vector_Table_RAM[VECTOR_TABLE_SIZE])(void) __attribute__((aligned
 * \Parameters (out): None                                                      
 * \Return value:   : None                                  
 *******************************************************************************/
-void Init_RAM_Vector_Table(void)
+void Init_GPT_Timer1A(void)
 {
-	if(CORE_PPH_VTABLE_R.R != (uint32_t)Vector_Table_RAM)
-	{
-		uint32_t Current_VT_Offset = (uint32_t)CORE_PPH_VTABLE_R.R;
-		uint32_t Loop_index = 0;
-		
-		while(Loop_index < VECTOR_TABLE_SIZE)
-		{
-			Vector_Table_RAM[Loop_index] = (void (*)(void)) (Current_VT_Offset + (Loop_index * sizeof(uint32_t)));
-			
-			Loop_index++;
-		}
-		
-		CORE_PPH_VTABLE_R.R = (uint32_t)Vector_Table_RAM;
-	}
-}
-
-/******************************************************************************
-* \Syntax          : void Init_RAM_Vector_Table(void)        
-* \Description     : init ram vtable                                    
-*                                                                             
-* \Sync\Async      : Asynchronous                                               
-* \Reentrancy      : Non Reentrant                                             
-* \Parameters (in) : None                     
-* \Parameters (out): None                                                      
-* \Return value:   : None                                  
-*******************************************************************************/
-void Set_SysTick_CallBack(void (* Fun_Handler)(void))
-{
-	Vector_Table_RAM[SYSTICK_IRQ_NUMBER] = Fun_Handler;
-}
-
-/******************************************************************************
-* \Syntax          : void Init_RAM_Vector_Table(void)        
-* \Description     : init ram vtable                                    
-*                                                                             
-* \Sync\Async      : Asynchronous                                               
-* \Reentrancy      : Non Reentrant                                             
-* \Parameters (in) : None                     
-* \Parameters (out): None                                                      
-* \Return value:   : None                                  
-*******************************************************************************/
-void Set_TIMER1A_CallBack(void (* Fun_Handler)(void))
-{
-	Vector_Table_RAM[TIMER1A_IRQ_NUMBER] = Fun_Handler;
+	SET_BIT(SYSTEM_CTRL_RCGCTIMER_R.B.R1);
+	
+	SET_BIT_FIELD_VALUE(GPTM_TIMER1_GPTMCTL_R.R, 0x0);
+	
+	SET_BIT_FIELD_VALUE(GPTM_TIMER1_GPTMCFG_R.R, 0x4);
+	
+	SET_BIT_FIELD_VALUE(GPTM_TIMER1_GPTMTAMR_R.R, 0x2);
+	
+	SET_BIT_FIELD_VALUE(GPTM_TIMER1_GPTMTAPR_R.R, 0xFF);
+	
+	SET_BIT_FIELD_VALUE(GPTM_TIMER1_GPTMTAILR_R.R, 0xFFFF);
+	
+	SET_BIT_FIELD_VALUE(GPTM_TIMER1_GPTMICR_R.R, 0x1);
+	
+	SET_BIT(GPTM_TIMER1_GPTMIMR_R.B.TATOIM);
+	
+	SET_BIT(GPTM_TIMER1_GPTMCTL_R.B.TAEN);
+	
+	NVIC_EN0_R.B.INT |= (0x1 << 21);
 }
 
 /******************************************************************************
@@ -117,5 +90,5 @@ void Set_TIMER1A_CallBack(void (* Fun_Handler)(void))
 }*/
 
 /**********************************************************************************************************************
- *  END OF FILE: Interrupt.c
+ *  END OF FILE: Timer.c
  *********************************************************************************************************************/
