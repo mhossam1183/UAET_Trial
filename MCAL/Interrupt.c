@@ -46,23 +46,23 @@ static void (* Vector_Table_RAM[VECTOR_TABLE_SIZE])(void) __attribute__((aligned
 void Intr_Init_RAM_Vector_Table(void)
 {
     /* Check VTABLE register was updated already */ 
-	if(CORE_PPH_VTABLE_R.R != (uint32_t)Vector_Table_RAM)
-	{
-		/* save initial VTABLE register value */
-		uint32_t Current_VT_Offset = (uint32_t)CORE_PPH_VTABLE_R.R;
-		uint32_t Loop_index = 0;
-		
-		/* copy the content of initial "Flash version" vector table to new RAM table */
-		while(Loop_index < VECTOR_TABLE_SIZE)
-		{
-			Vector_Table_RAM[Loop_index] = (void (*)(void)) (Current_VT_Offset + (Loop_index * sizeof(uint32_t)));
-			
-			Loop_index++;
-		}
-		
-		/* assign the address of the new RAM table to the VTABLE register */
-		CORE_PPH_VTABLE_R.R = (uint32_t)Vector_Table_RAM;
-	}
+  if(CORE_PPH_VTABLE_R.R != (uint32_t)Vector_Table_RAM)
+  {
+    /* save initial VTABLE register value */
+    uint32_t Current_VT_Offset = (uint32_t)CORE_PPH_VTABLE_R.R;
+    uint32_t Loop_index = 0;
+    
+    /* copy the content of initial "Flash version" vector table to new RAM table */
+    while(Loop_index < VECTOR_TABLE_SIZE)
+    {
+      Vector_Table_RAM[Loop_index] = (void (*)(void)) (Current_VT_Offset + (Loop_index * sizeof(uint32_t)));
+      
+      Loop_index++;
+    }
+    
+    /* assign the address of the new RAM table to the VTABLE register */
+    CORE_PPH_VTABLE_R.R = (uint32_t)Vector_Table_RAM;
+  }
 }
 
 /******************************************************************************
@@ -78,7 +78,7 @@ void Intr_Init_RAM_Vector_Table(void)
 *******************************************************************************/
 void Intr_Set_SysTick_CallBack(void (* Fun_Handler)(void))
 {
-	Vector_Table_RAM[SYSTICK_IRQ_NUMBER] = Fun_Handler;
+  Vector_Table_RAM[SYSTICK_IRQ_NUMBER] = Fun_Handler;
 }
 
 /******************************************************************************
@@ -94,7 +94,7 @@ void Intr_Set_SysTick_CallBack(void (* Fun_Handler)(void))
 *******************************************************************************/
 void Intr_Set_TIMER1A_CallBack(void (* Fun_Handler)(void))
 {
-	Vector_Table_RAM[TIMER1A_IRQ_NUMBER] = Fun_Handler;
+  Vector_Table_RAM[TIMER1A_IRQ_NUMBER] = Fun_Handler;
 }
 
 /**********************************************************************************************************************

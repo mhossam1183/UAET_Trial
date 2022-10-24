@@ -26,14 +26,14 @@
 /* GPIO Data register fields definition */
 typedef struct
 {
-	uint32_t DATA          :8;
-	uint32_t Reserved      :24;
+  uint32_t DATA          :8;
+  uint32_t Reserved      :24;
 }GPIODATA_BF;
 
 typedef union
 {
-	uint32_t     R;
-	GPIODATA_BF  B;
+  uint32_t     R;
+  GPIODATA_BF  B;
 }GPIODATA_Tag;
 
 /* GPIODATA register offset */
@@ -51,14 +51,14 @@ typedef union
 /* GPIO Direction fields definition */
 typedef struct
 {
-	uint32_t DIR           :8;
-	uint32_t Reserved      :24;
+  uint32_t DIR           :8;
+  uint32_t Reserved      :24;
 }GPIODIR_BF;
 
 typedef union
 {
-	uint32_t     R;
-	GPIODIR_BF  B;
+  uint32_t     R;
+  GPIODIR_BF  B;
 }GPIODIR_Tag;
 
 /* GPIODIR register offset */
@@ -70,14 +70,14 @@ typedef union
 /* GPIO Digital Enable fields definition */
 typedef struct
 {
-	uint32_t DEN           :8;
-	uint32_t Reserved      :24;
+  uint32_t DEN           :8;
+  uint32_t Reserved      :24;
 }GPIODEN_BF;
 
 typedef union
 {
-	uint32_t     R;
-	GPIODEN_BF  B;
+  uint32_t     R;
+  GPIODEN_BF  B;
 }GPIODEN_Tag;
 
 /* GPIODEN register offset */

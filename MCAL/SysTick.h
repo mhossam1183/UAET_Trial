@@ -26,18 +26,18 @@
 /* SysTick Control Register register fields definition */
 typedef struct
 {
-	uint32_t ENABLE        :1;
-	uint32_t INTEN         :1;
-	uint32_t CLK_SRC       :1;
-	uint32_t Reserved      :13;
-	uint32_t COUNT         :1;
-	uint32_t Reserved_2      :15;
+  uint32_t ENABLE        :1;
+  uint32_t INTEN         :1;
+  uint32_t CLK_SRC       :1;
+  uint32_t Reserved      :13;
+  uint32_t COUNT         :1;
+  uint32_t Reserved_2      :15;
 }STCTRL_BF;
 
 typedef union
 {
-	uint32_t     R;
-	STCTRL_BF  B;
+  uint32_t     R;
+  STCTRL_BF  B;
 }STCTRL_Tag;
 
 /* STCTRL register offset */
@@ -49,14 +49,14 @@ typedef union
 /* SysTick Reload Value register fields definition */
 typedef struct
 {
-	uint32_t RELOAD        :24;
-	uint32_t Reserved      :8;
+  uint32_t RELOAD        :24;
+  uint32_t Reserved      :8;
 }STRELOAD_BF;
 
 typedef union
 {
-	uint32_t     R;
-	STRELOAD_BF  B;
+  uint32_t     R;
+  STRELOAD_BF  B;
 }STRELOAD_Tag;
 
 /* STRELOAD register offset */
@@ -68,14 +68,14 @@ typedef union
 /* SysTick Current Value register fields definition */
 typedef struct
 {
-	uint32_t CURRENT        :24;
-	uint32_t Reserved      :8;
+  uint32_t CURRENT        :24;
+  uint32_t Reserved      :8;
 }STCURRENT_BF;
 
 typedef union
 {
-	uint32_t     R;
-	STCURRENT_BF  B;
+  uint32_t     R;
+  STCURRENT_BF  B;
 }STCURRENT_Tag;
 
 /* STCURRENT register offset */

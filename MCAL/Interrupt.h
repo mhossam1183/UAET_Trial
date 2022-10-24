@@ -26,14 +26,14 @@
 /* Vector Table Offset register fields definition */
 typedef struct
 {
-	uint32_t Reserved      :10;
-	uint32_t OFFSET        :22;
+  uint32_t Reserved      :10;
+  uint32_t OFFSET        :22;
 }VTABLE_BF;
 
 typedef union
 {
-	uint32_t     R;
-	VTABLE_BF  B;
+  uint32_t     R;
+  VTABLE_BF  B;
 }VTABLE_Tag;
 
 /* VTABLE register offset */

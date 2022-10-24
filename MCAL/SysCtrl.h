@@ -23,19 +23,19 @@
 /* General-Purpose Input/Output Run Mode Clock Gating Control register fields definition */
 typedef struct
 {
-	uint32_t PORTA_CLK     :1;
-	uint32_t PORTB_CLK     :1;
-	uint32_t PORTC_CLK     :1;
-	uint32_t PORTD_CLK     :1;
-	uint32_t PORTE_CLK     :1;
-	uint32_t PORTF_CLK     :1;
-	uint32_t Reserved      :26;
+  uint32_t PORTA_CLK     :1;
+  uint32_t PORTB_CLK     :1;
+  uint32_t PORTC_CLK     :1;
+  uint32_t PORTD_CLK     :1;
+  uint32_t PORTE_CLK     :1;
+  uint32_t PORTF_CLK     :1;
+  uint32_t Reserved      :26;
 }RCGCGPIO_BF;
 
 typedef union
 {
-	uint32_t     R;
-	RCGCGPIO_BF  B;
+  uint32_t     R;
+  RCGCGPIO_BF  B;
 }RCGCGPIO_Tag;
 
 /* System Control base address */
