@@ -20,23 +20,7 @@
 /**********************************************************************************************************************
  *  GLOBAL CONSTANT MACROS
  *********************************************************************************************************************/
-
-/*
-RCGCTIMER
-
-GPTMCTL
-GPTMCFG
-GPTMTAMR
-GPTMTAPR
-GPTMTAILR
-GPTMICR
-GPTMIMR
-GPTMCTL
-
-NVIC EN0
-*/
-
-/* 16/32-Bit General-Purpose Timer Run Mode Clock Gating Control */
+/* "16/32-Bit General-Purpose Timer Run Mode Clock Gating Control" register fields definition */
 typedef struct
 {
 	uint32_t R0              :1;
@@ -54,15 +38,17 @@ typedef union
 	RCGCTIMER_BF  B;
 }RCGCTIMER_Tag;
 
+/* RCGCTIMER register offset */
 #define SYSTEM_CTRL_RCGCTIMER_OFFSET     0x604
 
 #define SYSTEM_CTRL_RCGCTIMER_R          \
 ( * ( (volatile RCGCTIMER_Tag *) (SYSTEM_CTRL_BASE_ADDRESS + SYSTEM_CTRL_RCGCTIMER_OFFSET) ) )
 
 /*------------------------------------------------------------------------------------------------*/
+/* 16/32-bit Timer 1 base address */
 #define GPTM_TIMER1_BASE_ADDRESS          0x40031000
 
-/* GPTM Control */
+/* GPTM Control register fields definition */
 typedef struct
 {
 	uint32_t TAEN                   :1;
@@ -87,12 +73,13 @@ typedef union
 	GPTMCTL_BF  B;
 }GPTMCTL_Tag;
 
+/* GPTMCTL register offset */
 #define GPTM_TIMER1_GPTMCTL_OFFSET     0x00C
 
 #define GPTM_TIMER1_GPTMCTL_R          \
 ( * ( (volatile GPTMCTL_Tag *) (GPTM_TIMER1_BASE_ADDRESS + GPTM_TIMER1_GPTMCTL_OFFSET) ) )
 
-/* GPTM Configuration */
+/* GPTM Configuration register fields definition */
 typedef struct
 {
 	uint32_t GPTMCFG                   :3;
@@ -105,12 +92,13 @@ typedef union
 	GPTMCFG_BF  B;
 }GPTMCFG_Tag;
 
+/* GPTMCFG register offset */
 #define GPTM_TIMER1_GPTMCFG_OFFSET     0x000
 
 #define GPTM_TIMER1_GPTMCFG_R          \
 ( * ( (volatile GPTMCFG_Tag *) (GPTM_TIMER1_BASE_ADDRESS + GPTM_TIMER1_GPTMCFG_OFFSET) ) )
 
-/* GPTM Timer A Mode */
+/* GPTM Timer A Mode register fields definition */
 typedef struct
 {
 	uint32_t TAMR                      :2;
@@ -133,12 +121,13 @@ typedef union
 	GPTMTAMR_BF  B;
 }GPTMTAMR_Tag;
 
+/* GPTMTAMR register offset */
 #define GPTM_TIMER1_GPTMTAMR_OFFSET     0x004
 
 #define GPTM_TIMER1_GPTMTAMR_R          \
 ( * ( (volatile GPTMTAMR_Tag *) (GPTM_TIMER1_BASE_ADDRESS + GPTM_TIMER1_GPTMTAMR_OFFSET) ) )
 
-/* GPTM Timer A Prescale */
+/* GPTM Timer A Prescale register fields definition */
 typedef struct
 {
 	uint32_t TAPSR                     :8;
@@ -152,12 +141,13 @@ typedef union
 	GPTMTAPR_BF  B;
 }GPTMTAPR_Tag;
 
+/* GPTMTAPR register offset */
 #define GPTM_TIMER1_GPTMTAPR_OFFSET     0x038
 
 #define GPTM_TIMER1_GPTMTAPR_R          \
 ( * ( (volatile GPTMTAPR_Tag *) (GPTM_TIMER1_BASE_ADDRESS + GPTM_TIMER1_GPTMTAPR_OFFSET) ) )
 
-/* GPTM Timer A Interval Load */
+/* GPTM Timer A Interval Load register fields definition */
 typedef struct
 {
 	uint32_t TAILR                   :32;
@@ -169,12 +159,13 @@ typedef union
 	GPTMTAILR_BF  B;
 }GPTMTAILR_Tag;
 
+/* GPTMTAILR register offset */
 #define GPTM_TIMER1_GPTMTAILR_OFFSET     0x028
 
 #define GPTM_TIMER1_GPTMTAILR_R          \
 ( * ( (volatile GPTMTAILR_Tag *) (GPTM_TIMER1_BASE_ADDRESS + GPTM_TIMER1_GPTMTAILR_OFFSET) ) )
 
-/* GPTM Interrupt Clear */
+/* GPTM Interrupt Clear register fields definition */
 typedef struct
 {
 	uint32_t TATOCINT                  :1;
@@ -198,12 +189,13 @@ typedef union
 	GPTMICR_BF  B;
 }GPTMICR_Tag;
 
+/* GPTMICR register offset */
 #define GPTM_TIMER1_GPTMICR_OFFSET     0x024
 
 #define GPTM_TIMER1_GPTMICR_R          \
 ( * ( (volatile GPTMICR_Tag *) (GPTM_TIMER1_BASE_ADDRESS + GPTM_TIMER1_GPTMICR_OFFSET) ) )
 
-/* GPTM Interrupt Mask */
+/* GPTM Interrupt Mask register fields definition */
 typedef struct
 {
 	uint32_t TATOIM                  :1;
@@ -227,12 +219,13 @@ typedef union
 	GPTMIMR_BF  B;
 }GPTMIMR_Tag;
 
+/* GPTMIMR register offset */
 #define GPTM_TIMER1_GPTMIMR_OFFSET     0x018
 
 #define GPTM_TIMER1_GPTMIMR_R          \
 ( * ( (volatile GPTMIMR_Tag *) (GPTM_TIMER1_BASE_ADDRESS + GPTM_TIMER1_GPTMIMR_OFFSET) ) )
 
-/* GPTM Masked Interrupt Status */
+/* GPTM Masked Interrupt Status register fields definition */
 typedef struct
 {
 	uint32_t TATOMIS                  :1;
@@ -256,16 +249,17 @@ typedef union
 	GPTMMIS_BF  B;
 }GPTMMIS_Tag;
 
+/* GPTMMIS register offset */
 #define GPTM_TIMER1_GPTMMIS_OFFSET     0x020
 
 #define GPTM_TIMER1_GPTMMIS_R          \
 ( * ( (volatile GPTMMIS_Tag *) (GPTM_TIMER1_BASE_ADDRESS + GPTM_TIMER1_GPTMMIS_OFFSET) ) )
 
 /*------------------------------------------------------------------------------------------------*/
-
+/* NVIC Register base address */
 #define NVIC_BASE_ADDRESS         0xE000E000
 
-/* Interrupt 0-31 Set Enable */
+/* "Interrupt 0-31 Set Enable" register fields definition */
 typedef struct
 {
 	uint32_t INT                   :32;
@@ -277,26 +271,11 @@ typedef union
 	EN0_BF  B;
 }EN0_Tag;
 
+/* NVIC_EN0 register offset */
 #define NVIC_EN0_OFFSET     0x100
 
 #define NVIC_EN0_R          \
 ( * ( (volatile EN0_Tag *) (NVIC_BASE_ADDRESS + NVIC_EN0_OFFSET) ) )
-
-
-/**********************************************************************************************************************
- *  GLOBAL FUNCTION MACROS
- *********************************************************************************************************************/
-
-
-/**********************************************************************************************************************
- *  GLOBAL DATA TYPES AND STRUCTURES
- *********************************************************************************************************************/
-
-
-/**********************************************************************************************************************
- *  GLOBAL DATA PROTOTYPES
- *********************************************************************************************************************/
-
  
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION PROTOTYPES

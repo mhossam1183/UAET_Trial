@@ -23,7 +23,7 @@
 /* Core Peripherals base address */
 #define CORE_PPH_BASE_ADDRESS             0xE000E000
 
-/* SysTick Control Register */
+/* SysTick Control Register register fields definition */
 typedef struct
 {
 	uint32_t ENABLE        :1;
@@ -40,12 +40,13 @@ typedef union
 	STCTRL_BF  B;
 }STCTRL_Tag;
 
+/* STCTRL register offset */
 #define CORE_PPH_STCTRL_OFFSET     0x010
 
 #define CORE_PPH_STCTRL_R          \
 ( * ( (volatile STCTRL_Tag *) (CORE_PPH_BASE_ADDRESS + CORE_PPH_STCTRL_OFFSET) ) )
 
-/* SysTick Reload Value Register */
+/* SysTick Reload Value register fields definition */
 typedef struct
 {
 	uint32_t RELOAD        :24;
@@ -58,12 +59,13 @@ typedef union
 	STRELOAD_BF  B;
 }STRELOAD_Tag;
 
+/* STRELOAD register offset */
 #define CORE_PPH_STRELOAD_OFFSET     0x014
 
 #define CORE_PPH_STRELOAD_R          \
 ( * ( (volatile STRELOAD_Tag *) (CORE_PPH_BASE_ADDRESS + CORE_PPH_STRELOAD_OFFSET) ) )
 
-/* SysTick Current Value Register */
+/* SysTick Current Value register fields definition */
 typedef struct
 {
 	uint32_t CURRENT        :24;
@@ -76,31 +78,12 @@ typedef union
 	STCURRENT_BF  B;
 }STCURRENT_Tag;
 
+/* STCURRENT register offset */
 #define CORE_PPH_STCURRENT_OFFSET     0x018
 
 #define CORE_PPH_STCURRENT_R          \
 ( * ( (volatile STCURRENT_Tag *) (CORE_PPH_BASE_ADDRESS + CORE_PPH_STCURRENT_OFFSET) ) )
 
-/**********************************************************************************************************************
- *  GLOBAL FUNCTION MACROS
- *********************************************************************************************************************/
-
-
-/**********************************************************************************************************************
- *  GLOBAL DATA TYPES AND STRUCTURES
- *********************************************************************************************************************/
-
-
-/**********************************************************************************************************************
- *  GLOBAL DATA PROTOTYPES
- *********************************************************************************************************************/
-
- 
-/**********************************************************************************************************************
- *  GLOBAL FUNCTION PROTOTYPES
- *********************************************************************************************************************/
-
- 
 #endif  /* SYSTICK_H */
 
 /**********************************************************************************************************************
