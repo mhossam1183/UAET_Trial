@@ -25,7 +25,7 @@ int main(void)
 
 void TIMER1A_User_Activity(void)
 {
-	if((counter % 4) == 0)
+	if((counter % 2) == 0)
 	{
     Led_Toggle();
 	}
