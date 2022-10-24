@@ -272,7 +272,9 @@ typedef union
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION PROTOTYPES
  *********************************************************************************************************************/
-extern void Init_GPT_Timer1A(void);
+extern void Timer_Init_GPT_Timer1A(void);
+
+extern void Timer_Clear_Timer1A_Flag(void);
 
 #endif  /* TIMER_H */
 

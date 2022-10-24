@@ -59,11 +59,11 @@ typedef union
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION PROTOTYPES
  *********************************************************************************************************************/
-extern void Init_RAM_Vector_Table(void);
+extern void Intr_Init_RAM_Vector_Table(void);
 
-extern void Set_SysTick_CallBack(void (* Fun_Handler)(void));
+extern void Intr_Set_SysTick_CallBack(void (* Fun_Handler)(void));
 
-extern void Set_TIMER1A_CallBack(void (* Fun_Handler)(void));
+extern void Intr_Set_TIMER1A_CallBack(void (* Fun_Handler)(void));
  
 #endif  /* INTERRUPT_H */
 

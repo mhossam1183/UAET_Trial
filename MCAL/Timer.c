@@ -49,7 +49,7 @@
 * \Parameters (out): None                                                      
 * \Return value:   : None                                  
 *******************************************************************************/
-void Init_GPT_Timer1A(void)
+void Timer_Init_GPT_Timer1A(void)
 {
 	SET_BIT(SYSTEM_CTRL_RCGCTIMER_R.B.R1);
 	
@@ -70,6 +70,11 @@ void Init_GPT_Timer1A(void)
 	SET_BIT(GPTM_TIMER1_GPTMCTL_R.B.TAEN);
 	
 	NVIC_EN0_R.B.INT |= (0x1 << 21);
+}
+
+void Timer_Clear_Timer1A_Flag(void)
+{
+  SET_BIT_FIELD_VALUE(GPTM_TIMER1_GPTMICR_R.R, 0x1);
 }
 
 /******************************************************************************

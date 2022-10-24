@@ -51,7 +51,7 @@ static void (* Vector_Table_RAM[VECTOR_TABLE_SIZE])(void) __attribute__((aligned
 * \Parameters (out): None                                                      
 * \Return value:   : None                                  
 *******************************************************************************/
-void Init_RAM_Vector_Table(void)
+void Intr_Init_RAM_Vector_Table(void)
 {
 	if(CORE_PPH_VTABLE_R.R != (uint32_t)Vector_Table_RAM)
 	{
@@ -79,7 +79,7 @@ void Init_RAM_Vector_Table(void)
 * \Parameters (out): None                                                      
 * \Return value:   : None                                  
 *******************************************************************************/
-void Set_SysTick_CallBack(void (* Fun_Handler)(void))
+void Intr_Set_SysTick_CallBack(void (* Fun_Handler)(void))
 {
 	Vector_Table_RAM[SYSTICK_IRQ_NUMBER] = Fun_Handler;
 }
@@ -94,7 +94,7 @@ void Set_SysTick_CallBack(void (* Fun_Handler)(void))
 * \Parameters (out): None                                                      
 * \Return value:   : None                                  
 *******************************************************************************/
-void Set_TIMER1A_CallBack(void (* Fun_Handler)(void))
+void Intr_Set_TIMER1A_CallBack(void (* Fun_Handler)(void))
 {
 	Vector_Table_RAM[TIMER1A_IRQ_NUMBER] = Fun_Handler;
 }
