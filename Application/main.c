@@ -4,6 +4,8 @@
 
 extern void TIMER1A_User_Activity(void);
 
+static unsigned char counter = 0;
+
 int main(void)
 {
   Led_Init_Green();
@@ -23,7 +25,12 @@ int main(void)
 
 void TIMER1A_User_Activity(void)
 {
-  Led_Toggle();
-  
-  Timer_Clear_Timer1A_Flag();
+	if((counter % 4) == 0)
+	{
+    Led_Toggle();
+	}
+	
+	counter++;
+	
+	Timer_Clear_Timer1A_Flag();
 }

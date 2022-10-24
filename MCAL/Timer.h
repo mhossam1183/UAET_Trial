@@ -232,6 +232,35 @@ typedef union
 #define GPTM_TIMER1_GPTMIMR_R          \
 ( * ( (volatile GPTMIMR_Tag *) (GPTM_TIMER1_BASE_ADDRESS + GPTM_TIMER1_GPTMIMR_OFFSET) ) )
 
+/* GPTM Masked Interrupt Status */
+typedef struct
+{
+	uint32_t TATOMIS                  :1;
+	uint32_t CAMMIS                   :1;
+	uint32_t CAEMIS                   :1;
+	uint32_t RTCMIS                   :1;
+	uint32_t TAMMIS                   :1;
+	uint32_t Reserved2               :3;
+	uint32_t TBTOMIS                  :1;
+	uint32_t CBMMIS                   :1;
+	uint32_t CBEMIS                   :1;
+	uint32_t TBMMIS                   :1;
+	uint32_t Reserved1               :4;
+	uint32_t WUEMIS                   :1;
+	uint32_t Reserved                :15;
+}GPTMMIS_BF;
+
+typedef union
+{
+	uint32_t     R;
+	GPTMMIS_BF  B;
+}GPTMMIS_Tag;
+
+#define GPTM_TIMER1_GPTMMIS_OFFSET     0x020
+
+#define GPTM_TIMER1_GPTMMIS_R          \
+( * ( (volatile GPTMMIS_Tag *) (GPTM_TIMER1_BASE_ADDRESS + GPTM_TIMER1_GPTMMIS_OFFSET) ) )
+
 /*------------------------------------------------------------------------------------------------*/
 
 #define NVIC_BASE_ADDRESS         0xE000E000
