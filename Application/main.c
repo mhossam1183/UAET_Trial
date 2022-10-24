@@ -34,14 +34,14 @@ int main(void)
 /* user function definition */
 void TIMER1A_User_Activity(void)
 {
-	if((cycle_count % (user_cycle_Sec * 2)) == 0)
-	{
-	/* Green LED toggle */
-	Led_Toggle();
-	}
-	
-	cycle_count++;
-	
-	/* clear GPTM "Timer 1 A" Interrupt flag */
-	Timer_Clear_Timer1A_Flag();
+  if((cycle_count % (user_cycle_Sec * 2)) == 0)
+  {
+    /* Green LED toggle */
+    Led_Toggle();
+  }
+  
+  cycle_count++;
+  
+  /* clear GPTM "Timer 1 A" Interrupt flag */
+  Timer_Clear_Timer1A_Flag();
 }
