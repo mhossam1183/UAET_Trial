@@ -255,36 +255,6 @@ typedef union
 #define GPTM_TIMER1_GPTMMIS_R          \
 ( * ( (volatile GPTMMIS_Tag *) (GPTM_TIMER1_BASE_ADDRESS + GPTM_TIMER1_GPTMMIS_OFFSET) ) )
 
-/* GPTM Raw Interrupt Status register fields definition */
-typedef struct
-{
-	uint32_t TATORIS                  :1;
-	uint32_t CAMRIS                   :1;
-	uint32_t CAERIS                   :1;
-	uint32_t RTCRIS                   :1;
-	uint32_t TAMRIS                   :1;
-	uint32_t Reserved2               :3;
-	uint32_t TBTORIS                  :1;
-	uint32_t CBMRIS                   :1;
-	uint32_t CBERIS                   :1;
-	uint32_t TBMRIS                   :1;
-	uint32_t Reserved1               :4;
-	uint32_t WUERIS                   :1;
-	uint32_t Reserved                :15;
-}GPTMRIS_BF;
-
-typedef union
-{
-	uint32_t     R;
-	GPTMRIS_BF  B;
-}GPTMRIS_Tag;
-
-/* GPTMMIS register offset */
-#define GPTM_TIMER1_GPTMRIS_OFFSET     0x01C
-
-#define GPTM_TIMER1_GPTMRIS_R          \
-( * ( (volatile GPTMRIS_Tag *) (GPTM_TIMER1_BASE_ADDRESS + GPTM_TIMER1_GPTMRIS_OFFSET) ) )
-
 /*------------------------------------------------------------------------------------------------*/
 /* NVIC Register base address */
 #define NVIC_BASE_ADDRESS         0xE000E000
