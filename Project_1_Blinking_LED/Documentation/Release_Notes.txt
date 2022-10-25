@@ -1,0 +1,7 @@
+Blinking LED Project:
+----------------------
+1. SysTick timer driver is implmented but not used.
+
+2. GPTM Timer Limitation due to difficulties in configuration: fixed cycle time (500 ms), and fixed duty cycle (50%).
+
+3. main.c Limitation: variable cycle time implemented using counter variables not the Timer itself.
