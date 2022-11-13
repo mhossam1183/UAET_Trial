@@ -640,6 +640,22 @@ typedef enum
                                             TaskHandle_t * pxCreatedTask ) PRIVILEGED_FUNCTION;
 #endif
 
+#if ( configUSE_EDF_SCHEDULER == 1 ) /* EDF scheduler is used */
+
+/* BaseType_t xTaskPeriodicCreate(): a modified version of the standard method xTaskCreate(),
+ * that receives the task period as additional input parameter,
+ * and set the xTaskPeriod variable in the task TCB structure.
+*/
+    BaseType_t xTaskPeriodicCreate( TaskFunction_t pxTaskCode,
+                                    const char * const pcName, /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
+                                    const configSTACK_DEPTH_TYPE usStackDepth,
+                                    void * const pvParameters,
+                                    UBaseType_t uxPriority,
+                                    TaskHandle_t * const pxCreatedTask,
+                                    TickType_t uxPeriod ) PRIVILEGED_FUNCTION;
+
+#endif
+
 /**
  * task. h
  * @code{c}

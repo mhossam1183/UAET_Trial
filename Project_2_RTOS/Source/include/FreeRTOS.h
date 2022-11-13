@@ -248,6 +248,10 @@
     #define portCRITICAL_NESTING_IN_TCB    0
 #endif
 
+#ifndef configUSE_EDF_SCHEDULER
+    #define configUSE_EDF_SCHEDULER    1
+#endif
+
 #ifndef configMAX_TASK_NAME_LEN
     #define configMAX_TASK_NAME_LEN    16
 #endif
