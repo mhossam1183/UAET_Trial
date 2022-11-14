@@ -2991,7 +2991,7 @@ BaseType_t xTaskIncrementTick( void )
                              * only be performed if the unblocked task has a
                              * deadline that is equal to or less than the
                              * currently executing task. */
-                            if( listGET_LIST_ITEM_VALUE( pxTCB ) <= listGET_LIST_ITEM_VALUE( pxCurrentTCB ) )
+                            if( ( & ( pxTCB->xStateListItem ) ) <= ( & ( pxCurrentTCB->xStateListItem ) ) )
                             {
                                 xSwitchRequired = pdTRUE;
                             }
