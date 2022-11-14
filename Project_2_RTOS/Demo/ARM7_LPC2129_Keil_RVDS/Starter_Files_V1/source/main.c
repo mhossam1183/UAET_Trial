@@ -82,16 +82,35 @@
  */
 static void prvSetupHardware( void );
 
-static void vTaskCode_toggle( void * pvParameters );
-static void vTaskCode_button( void * pvParameters );
-
+static void vTaskCode_Button_1_Monitor( void * pvParameters );
+static void vTaskCode_Button_2_Monitor( void * pvParameters );
+static void vTaskCode_Periodic_Transmitter( void * pvParameters );
+static void vTaskCode_Uart_Receiver( void * pvParameters );
+static void vTaskCode_Load_1_Simulation( void * pvParameters );
+static void vTaskCode_Load_2_Simulation( void * pvParameters );
 /*-----------------------------------------------------------*/
 
-pinState_t var_port0_pin0 = PIN_IS_LOW;
+pinState_t button1_port0_pin0 = PIN_IS_LOW;
+pinState_t button2_port0_pin1 = PIN_IS_LOW;
 
-static BaseType_t xReturned;
-static TaskHandle_t xHandle_toggle = NULL;
-static TaskHandle_t xHandle_button = NULL;
+unsigned char load1_count = 0;
+unsigned char load2_count = 0;
+
+static BaseType_t xReturned = pdFAIL;
+
+extern TaskHandle_t xHandle_Button_1_Monitor;
+extern TaskHandle_t xHandle_Button_2_Monitor;
+extern TaskHandle_t xHandle_Periodic_Transmitter;
+extern TaskHandle_t xHandle_Uart_Receiver;
+extern TaskHandle_t xHandle_Load_1_Simulation;
+extern TaskHandle_t xHandle_Load_2_Simulation;
+
+TaskHandle_t xHandle_Button_1_Monitor = NULL;
+TaskHandle_t xHandle_Button_2_Monitor = NULL;
+TaskHandle_t xHandle_Periodic_Transmitter = NULL;
+TaskHandle_t xHandle_Uart_Receiver = NULL;
+TaskHandle_t xHandle_Load_1_Simulation = NULL;
+TaskHandle_t xHandle_Load_2_Simulation = NULL;
 
 /*-----------------------------------------------------------*/
 
@@ -103,36 +122,90 @@ int main( void )
 {
 	/* Setup the hardware for use with the Keil demo board. */
 	prvSetupHardware();
-	
 
-	
 	/* Create the task, storing the handle. */
 	xReturned = xTaskCreate(
-		vTaskCode_toggle,       /* Function that implements the task. */
-		"toggle_task",          /* Text name for the task. */
+		vTaskCode_Button_1_Monitor,       /* Function that implements the task. */
+		"Button_1_Monitor",          /* Text name for the task. */
 		100,      /* Stack size in words, not bytes. */
 		( void * ) NULL,    /* Parameter passed into the task. */
-		1,/* Priority at which the task is created. */
-		&xHandle_toggle );      /* Used to pass out the created task's handle. */
-	
+		4,/* Priority at which the task is created. */
+		&xHandle_Button_1_Monitor );      /* Used to pass out the created task's handle. */
+
 	if( xReturned != pdPASS )
 	{
 		/* The task was created.  Use the task's handle to delete the task. */
-		vTaskDelete( xHandle_toggle );
+		vTaskDelete( xHandle_Button_1_Monitor );
+	}
+
+	xReturned = xTaskCreate(
+		vTaskCode_Button_2_Monitor,       /* Function that implements the task. */
+		"Button_2_Monitor",          /* Text name for the task. */
+		100,      /* Stack size in words, not bytes. */
+		( void * ) NULL,    /* Parameter passed into the task. */
+		4,/* Priority at which the task is created. */
+		&xHandle_Button_2_Monitor );      /* Used to pass out the created task's handle. */
+
+	if( xReturned != pdPASS )
+	{
+		/* The task was created.  Use the task's handle to delete the task. */
+		vTaskDelete( xHandle_Button_2_Monitor );
 	}
 	
 	xReturned = xTaskCreate(
-		vTaskCode_button,       /* Function that implements the task. */
-		"button_task",          /* Text name for the task. */
+		vTaskCode_Periodic_Transmitter,       /* Function that implements the task. */
+		"Periodic_Transmitter",          /* Text name for the task. */
 		100,      /* Stack size in words, not bytes. */
 		( void * ) NULL,    /* Parameter passed into the task. */
 		1,/* Priority at which the task is created. */
-		&xHandle_button );      /* Used to pass out the created task's handle. */
-	
+		&xHandle_Periodic_Transmitter );      /* Used to pass out the created task's handle. */
+
 	if( xReturned != pdPASS )
 	{
 		/* The task was created.  Use the task's handle to delete the task. */
-		vTaskDelete( xHandle_button );
+		vTaskDelete( xHandle_Periodic_Transmitter );
+	}
+
+	xReturned = xTaskCreate(
+		vTaskCode_Uart_Receiver,       /* Function that implements the task. */
+		"Uart_Receiver",          /* Text name for the task. */
+		100,      /* Stack size in words, not bytes. */
+		( void * ) NULL,    /* Parameter passed into the task. */
+		1,/* Priority at which the task is created. */
+		&xHandle_Uart_Receiver );      /* Used to pass out the created task's handle. */
+
+	if( xReturned != pdPASS )
+	{
+		/* The task was created.  Use the task's handle to delete the task. */
+		vTaskDelete( xHandle_Uart_Receiver );
+	}
+	
+	xReturned = xTaskCreate(
+		vTaskCode_Load_1_Simulation,       /* Function that implements the task. */
+		"Load_1_Simulation",          /* Text name for the task. */
+		100,      /* Stack size in words, not bytes. */
+		( void * ) NULL,    /* Parameter passed into the task. */
+		1,/* Priority at which the task is created. */
+		&xHandle_Load_1_Simulation );      /* Used to pass out the created task's handle. */
+
+	if( xReturned != pdPASS )
+	{
+		/* The task was created.  Use the task's handle to delete the task. */
+		vTaskDelete( xHandle_Load_1_Simulation );
+	}
+
+	xReturned = xTaskCreate(
+		vTaskCode_Load_2_Simulation,       /* Function that implements the task. */
+		"Load_2_Simulation",          /* Text name for the task. */
+		100,      /* Stack size in words, not bytes. */
+		( void * ) NULL,    /* Parameter passed into the task. */
+		1,/* Priority at which the task is created. */
+		&xHandle_Load_2_Simulation );      /* Used to pass out the created task's handle. */
+
+	if( xReturned != pdPASS )
+	{
+		/* The task was created.  Use the task's handle to delete the task. */
+		vTaskDelete( xHandle_Load_2_Simulation );
 	}
     /* Create Tasks here */
 
@@ -154,38 +227,72 @@ int main( void )
 /*-----------------------------------------------------------*/
 
 /* Task to be created. */
-void vTaskCode_toggle( void * pvParameters )
+void vTaskCode_Button_1_Monitor( void * pvParameters )
 {
 	/* The parameter value is expected to be 1 as 1 is passed in the
 	pvParameters value in the call to xTaskCreate() below. */
 	
 	for( ;; )
 	{
-		if(var_port0_pin0 == PIN_IS_HIGH)
+		if( button1_port0_pin0 != GPIO_read(PORT_0, PIN0) )
 		{
-			GPIO_write(PORT_0, PIN1, PIN_IS_HIGH);
-		}
-		else
-		{
-			GPIO_write(PORT_0, PIN1, PIN_IS_LOW);
+			button1_port0_pin0 = GPIO_read(PORT_0, PIN0);
 		}
 		
-		vTaskDelay( 200 );
+		vTaskDelay( 50 );
 	}
 }
 
-void vTaskCode_button( void * pvParameters )
+void vTaskCode_Button_2_Monitor( void * pvParameters )
 {
 	/* The parameter value is expected to be 1 as 1 is passed in the
 	pvParameters value in the call to xTaskCreate() below. */
 	
 	for( ;; )
 	{
-		var_port0_pin0 = GPIO_read(PORT_0, PIN0);
+		if( button2_port0_pin1 != GPIO_read(PORT_0, PIN1) )
+		{
+			button2_port0_pin1 = GPIO_read(PORT_0, PIN1);
+		}
+		
+		vTaskDelay(50);
+	}
+}
+
+void vTaskCode_Periodic_Transmitter( void * pvParameters )
+{
+	for( ;; )
+	{
+		if(button1_port0_pin0 == PIN_IS_HIGH)
+		{
+			GPIO_write(PORT_0, PIN2, PIN_IS_HIGH);
+		}
+		else
+		{
+			GPIO_write(PORT_0, PIN2, PIN_IS_LOW);
+		}
 		
 		vTaskDelay(100);
 	}
 }
+void vTaskCode_Uart_Receiver( void * pvParameters )
+{
+	for( ;; )
+	{
+		if(button2_port0_pin1 == PIN_IS_HIGH)
+		{
+			GPIO_write(PORT_0, PIN3, PIN_IS_HIGH);
+		}
+		else
+		{
+			GPIO_write(PORT_0, PIN3, PIN_IS_LOW);
+		}
+		
+		vTaskDelay(20);
+	}
+}
+void vTaskCode_Load_1_Simulation( void * pvParameters ){for( ;; ){for(load1_count = 0;load1_count < 50; load1_count++){}vTaskDelay(10);}}
+void vTaskCode_Load_2_Simulation( void * pvParameters ){for( ;; ){for(load2_count = 0;load2_count < 120; load2_count++){}vTaskDelay(100);}}
 
 /*-----------------------------------------------------------*/
 

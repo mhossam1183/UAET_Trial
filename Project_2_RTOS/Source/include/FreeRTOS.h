@@ -249,7 +249,7 @@
 #endif
 
 #ifndef configUSE_EDF_SCHEDULER
-    #define configUSE_EDF_SCHEDULER    1
+    #define configUSE_EDF_SCHEDULER    0
 #endif
 
 #ifndef configMAX_TASK_NAME_LEN
