@@ -3630,10 +3630,10 @@ static portTASK_FUNCTION( prvIdleTask, pvParameters )
         #if ( configUSE_EDF_SCHEDULER == 1 ) /* EDF scheduler is used */
             {
                 /* get Idle task TCB. */
-                TCB_t * pxTempIdleTCB = ( ( &( ( xReadyTasksListEDF )->xListEnd ) )->pxPrevious->pvOwner );
+                TCB_t * pxTempIdleTCB = ( TCB_t * ) ( ( &( ( &xReadyTasksListEDF )->xListEnd ) )->pxPrevious->pvOwner );
 
                 /* Increment idle task deadline. */
-                listSET_LIST_ITEM_VALUE( &( ( pxTempIdleTCB )->xStateListItem ), ( ( pxTempIdleTCB )->xStateListItem + 1 ) );
+                listSET_LIST_ITEM_VALUE( &( pxTempIdleTCB->xStateListItem ), ( (TickType_t) ( (&( pxTempIdleTCB->xStateListItem)) + 1 ) ) );
             }
         #endif
 
