@@ -231,7 +231,7 @@
 #define prvAddTaskToReadyList( pxTCB )                                                                 \
     traceMOVED_TASK_TO_READY_STATE( pxTCB );                                                           \
     taskRECORD_READY_PRIORITY( ( pxTCB )->uxPriority );                                                \
-    listINSERT_END( &(xReadyTasksListEDF), &( ( pxTCB )->xStateListItem ) );                         \
+    vListInsert( &(xReadyTasksListEDF), &( ( pxTCB )->xStateListItem ) );                         \
     tracePOST_MOVED_TASK_TO_READY_STATE( pxTCB )
 
 #endif
@@ -2955,19 +2955,43 @@ BaseType_t xTaskIncrementTick( void )
                         mtCOVERAGE_TEST_MARKER();
                     }
 
+                    #if ( configUSE_EDF_SCHEDULER == 1 ) /* EDF scheduler is used */
+
+                    /* calculate the task's "new deadline" before inserting in ready list. */
+                    listSET_LIST_ITEM_VALUE( &( ( pxTCB )->xStateListItem ), ( ( pxTCB )->xTaskPeriod + ( xTaskGetTickCount() ) ) );
+
+                    #endif
+
                     /* Place the unblocked task into the appropriate ready
                      * list. */
                     prvAddTaskToReadyList( pxTCB );
 
                     /* A task being unblocked cannot cause an immediate
                      * context switch if preemption is turned off. */
-                    #if ( configUSE_PREEMPTION == 1 )
+                    #if ( ( configUSE_PREEMPTION == 1 ) && ( configUSE_EDF_SCHEDULER == 0 ) )
                         {
                             /* Preemption is on, but a context switch should
                              * only be performed if the unblocked task has a
                              * priority that is equal to or higher than the
                              * currently executing task. */
                             if( pxTCB->uxPriority >= pxCurrentTCB->uxPriority )
+                            {
+                                xSwitchRequired = pdTRUE;
+                            }
+                            else
+                            {
+                                mtCOVERAGE_TEST_MARKER();
+                            }
+                        }
+                    #endif /* configUSE_PREEMPTION */
+
+                    #if ( ( configUSE_PREEMPTION == 1 ) && ( configUSE_EDF_SCHEDULER == 1 ) )
+                        {
+                            /* Preemption is on, but a context switch should
+                             * only be performed if the unblocked task has a
+                             * deadline that is equal to or less than the
+                             * currently executing task. */
+                            if( listGET_LIST_ITEM_VALUE( pxTCB ) <= listGET_LIST_ITEM_VALUE( pxCurrentTCB ) )
                             {
                                 xSwitchRequired = pdTRUE;
                             }
@@ -3602,6 +3626,16 @@ static portTASK_FUNCTION( prvIdleTask, pvParameters )
         /* See if any tasks have deleted themselves - if so then the idle task
          * is responsible for freeing the deleted task's TCB and stack. */
         prvCheckTasksWaitingTermination();
+
+        #if ( configUSE_EDF_SCHEDULER == 1 ) /* EDF scheduler is used */
+            {
+                /* get Idle task TCB. */
+                TCB_t * pxTempIdleTCB = ( ( &( ( xReadyTasksListEDF )->xListEnd ) )->pxPrevious->pvOwner );
+
+                /* Increment idle task deadline. */
+                listSET_LIST_ITEM_VALUE( &( ( pxTempIdleTCB )->xStateListItem ), ( ( pxTempIdleTCB )->xStateListItem + 1 ) );
+            }
+        #endif
 
         #if ( configUSE_PREEMPTION == 0 )
             {
