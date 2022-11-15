@@ -65,6 +65,7 @@
 #include "serial.h"
 #include "GPIO.h"
 
+#if ( configUSE_EDF_SCHEDULER == 1 ) /* EDF scheduler is used */
 
 /*-----------------------------------------------------------*/
 
@@ -124,13 +125,14 @@ int main( void )
 	prvSetupHardware();
 
 	/* Create the task, storing the handle. */
-	xReturned = xTaskCreate(
+	xReturned = xTaskPeriodicCreate(
 		vTaskCode_Button_1_Monitor,       /* Function that implements the task. */
 		"Button_1_Monitor",          /* Text name for the task. */
 		100,      /* Stack size in words, not bytes. */
 		( void * ) NULL,    /* Parameter passed into the task. */
 		4,/* Priority at which the task is created. */
-		&xHandle_Button_1_Monitor );      /* Used to pass out the created task's handle. */
+		&xHandle_Button_1_Monitor,      /* Used to pass out the created task's handle. */
+		50 );
 
 	if( xReturned != pdPASS )
 	{
@@ -138,13 +140,14 @@ int main( void )
 		vTaskDelete( xHandle_Button_1_Monitor );
 	}
 
-	xReturned = xTaskCreate(
+	xReturned = xTaskPeriodicCreate(
 		vTaskCode_Button_2_Monitor,       /* Function that implements the task. */
 		"Button_2_Monitor",          /* Text name for the task. */
 		100,      /* Stack size in words, not bytes. */
 		( void * ) NULL,    /* Parameter passed into the task. */
 		4,/* Priority at which the task is created. */
-		&xHandle_Button_2_Monitor );      /* Used to pass out the created task's handle. */
+		&xHandle_Button_2_Monitor,      /* Used to pass out the created task's handle. */
+		50 );
 
 	if( xReturned != pdPASS )
 	{
@@ -152,13 +155,14 @@ int main( void )
 		vTaskDelete( xHandle_Button_2_Monitor );
 	}
 	
-	xReturned = xTaskCreate(
+	xReturned = xTaskPeriodicCreate(
 		vTaskCode_Periodic_Transmitter,       /* Function that implements the task. */
 		"Periodic_Transmitter",          /* Text name for the task. */
 		100,      /* Stack size in words, not bytes. */
 		( void * ) NULL,    /* Parameter passed into the task. */
 		1,/* Priority at which the task is created. */
-		&xHandle_Periodic_Transmitter );      /* Used to pass out the created task's handle. */
+		&xHandle_Periodic_Transmitter,      /* Used to pass out the created task's handle. */
+		100 );
 
 	if( xReturned != pdPASS )
 	{
@@ -166,42 +170,45 @@ int main( void )
 		vTaskDelete( xHandle_Periodic_Transmitter );
 	}
 
-	xReturned = xTaskCreate(
+	xReturned = xTaskPeriodicCreate(
 		vTaskCode_Uart_Receiver,       /* Function that implements the task. */
 		"Uart_Receiver",          /* Text name for the task. */
 		100,      /* Stack size in words, not bytes. */
 		( void * ) NULL,    /* Parameter passed into the task. */
 		1,/* Priority at which the task is created. */
-		&xHandle_Uart_Receiver );      /* Used to pass out the created task's handle. */
-
+		&xHandle_Uart_Receiver,      /* Used to pass out the created task's handle. */
+		20 );
+		
 	if( xReturned != pdPASS )
 	{
 		/* The task was created.  Use the task's handle to delete the task. */
 		vTaskDelete( xHandle_Uart_Receiver );
 	}
 	
-	xReturned = xTaskCreate(
+	xReturned = xTaskPeriodicCreate(
 		vTaskCode_Load_1_Simulation,       /* Function that implements the task. */
 		"Load_1_Simulation",          /* Text name for the task. */
 		100,      /* Stack size in words, not bytes. */
 		( void * ) NULL,    /* Parameter passed into the task. */
 		1,/* Priority at which the task is created. */
-		&xHandle_Load_1_Simulation );      /* Used to pass out the created task's handle. */
-
+		&xHandle_Load_1_Simulation,      /* Used to pass out the created task's handle. */
+		10 );
+		
 	if( xReturned != pdPASS )
 	{
 		/* The task was created.  Use the task's handle to delete the task. */
 		vTaskDelete( xHandle_Load_1_Simulation );
 	}
 
-	xReturned = xTaskCreate(
+	xReturned = xTaskPeriodicCreate(
 		vTaskCode_Load_2_Simulation,       /* Function that implements the task. */
 		"Load_2_Simulation",          /* Text name for the task. */
 		100,      /* Stack size in words, not bytes. */
 		( void * ) NULL,    /* Parameter passed into the task. */
 		1,/* Priority at which the task is created. */
-		&xHandle_Load_2_Simulation );      /* Used to pass out the created task's handle. */
-
+		&xHandle_Load_2_Simulation,      /* Used to pass out the created task's handle. */
+		100 );
+		
 	if( xReturned != pdPASS )
 	{
 		/* The task was created.  Use the task's handle to delete the task. */
@@ -239,7 +246,7 @@ void vTaskCode_Button_1_Monitor( void * pvParameters )
 			button1_port0_pin0 = GPIO_read(PORT_0, PIN0);
 		}
 		
-		vTaskDelay( 50 );
+		taskYIELD();
 	}
 }
 
@@ -255,7 +262,7 @@ void vTaskCode_Button_2_Monitor( void * pvParameters )
 			button2_port0_pin1 = GPIO_read(PORT_0, PIN1);
 		}
 		
-		vTaskDelay(50);
+		taskYIELD();
 	}
 }
 
@@ -272,7 +279,7 @@ void vTaskCode_Periodic_Transmitter( void * pvParameters )
 			GPIO_write(PORT_0, PIN2, PIN_IS_LOW);
 		}
 		
-		vTaskDelay(100);
+		taskYIELD();
 	}
 }
 void vTaskCode_Uart_Receiver( void * pvParameters )
@@ -288,11 +295,293 @@ void vTaskCode_Uart_Receiver( void * pvParameters )
 			GPIO_write(PORT_0, PIN3, PIN_IS_LOW);
 		}
 		
-		vTaskDelay(20);
+		taskYIELD();
 	}
 }
-void vTaskCode_Load_1_Simulation( void * pvParameters ){for( ;; ){for(load1_count = 0;load1_count < 50; load1_count++){}vTaskDelay(10);}}
-void vTaskCode_Load_2_Simulation( void * pvParameters ){for( ;; ){for(load2_count = 0;load2_count < 120; load2_count++){}vTaskDelay(100);}}
+void vTaskCode_Load_1_Simulation( void * pvParameters ){for( ;; ){for(load1_count = 0;load1_count < 50; load1_count++){}taskYIELD();}}
+void vTaskCode_Load_2_Simulation( void * pvParameters ){for( ;; ){for(load2_count = 0;load2_count < 120; load2_count++){}taskYIELD();}}
+
+#endif
+
+
+#if ( configUSE_EDF_SCHEDULER == 0 ) /* EDF scheduler is used */
+
+/*-----------------------------------------------------------*/
+
+/* Constants to setup I/O and processor. */
+#define mainBUS_CLK_FULL	( ( unsigned char ) 0x01 )
+
+/* Constants for the ComTest demo application tasks. */
+#define mainCOM_TEST_BAUD_RATE	( ( unsigned long ) 115200 )
+
+
+/*
+ * Configure the processor for use with the Keil demo board.  This is very
+ * minimal as most of the setup is managed by the settings in the project
+ * file.
+ */
+static void prvSetupHardware( void );
+
+static void vTaskCode_Button_1_Monitor( void * pvParameters );
+static void vTaskCode_Button_2_Monitor( void * pvParameters );
+static void vTaskCode_Periodic_Transmitter( void * pvParameters );
+static void vTaskCode_Uart_Receiver( void * pvParameters );
+static void vTaskCode_Load_1_Simulation( void * pvParameters );
+static void vTaskCode_Load_2_Simulation( void * pvParameters );
+/*-----------------------------------------------------------*/
+
+pinState_t button1_port0_pin0 = PIN_IS_LOW;
+pinState_t button2_port0_pin1 = PIN_IS_LOW;
+
+unsigned char load1_count = 0;
+unsigned char load2_count = 0;
+
+static BaseType_t xReturned = pdFAIL;
+
+extern TaskHandle_t xHandle_Button_1_Monitor;
+extern TaskHandle_t xHandle_Button_2_Monitor;
+extern TaskHandle_t xHandle_Periodic_Transmitter;
+extern TaskHandle_t xHandle_Uart_Receiver;
+extern TaskHandle_t xHandle_Load_1_Simulation;
+extern TaskHandle_t xHandle_Load_2_Simulation;
+
+TaskHandle_t xHandle_Button_1_Monitor = NULL;
+TaskHandle_t xHandle_Button_2_Monitor = NULL;
+TaskHandle_t xHandle_Periodic_Transmitter = NULL;
+TaskHandle_t xHandle_Uart_Receiver = NULL;
+TaskHandle_t xHandle_Load_1_Simulation = NULL;
+TaskHandle_t xHandle_Load_2_Simulation = NULL;
+
+static TickType_t xLastWakeTime_Button_1_Monitor;
+static TickType_t xLastWakeTime_Button_2_Monitor;
+static TickType_t xLastWakeTime_Periodic_Transmitter;
+static TickType_t xLastWakeTime_Uart_Receiver;
+static TickType_t xLastWakeTime_Load_1_Simulation;
+static TickType_t xLastWakeTime_Load_2_Simulation;
+
+const TickType_t xFrequency_Button_1_Monitor = 50;
+const TickType_t xFrequency_Button_2_Monitor = 50;
+const TickType_t xFrequency_Periodic_Transmitter = 100;
+const TickType_t xFrequency_Uart_Receiver = 20;
+const TickType_t xFrequency_Load_1_Simulation = 10;
+const TickType_t xFrequency_Load_2_Simulation = 100;
+
+/*-----------------------------------------------------------*/
+
+/*
+ * Application entry point:
+ * Starts all the other tasks, then starts the scheduler. 
+ */
+int main( void )
+{
+	/* Setup the hardware for use with the Keil demo board. */
+	prvSetupHardware();
+
+	/* Create the task, storing the handle. */
+	xReturned = xTaskCreate(
+		vTaskCode_Button_1_Monitor,       /* Function that implements the task. */
+		"Button_1_Monitor",          /* Text name for the task. */
+		100,      /* Stack size in words, not bytes. */
+		( void * ) NULL,    /* Parameter passed into the task. */
+		3,/* Priority at which the task is created. */
+		&xHandle_Button_1_Monitor );      /* Used to pass out the created task's handle. */
+
+	if( xReturned != pdPASS )
+	{
+		/* The task was created.  Use the task's handle to delete the task. */
+		vTaskDelete( xHandle_Button_1_Monitor );
+	}
+
+	xReturned = xTaskCreate(
+		vTaskCode_Button_2_Monitor,       /* Function that implements the task. */
+		"Button_2_Monitor",          /* Text name for the task. */
+		100,      /* Stack size in words, not bytes. */
+		( void * ) NULL,    /* Parameter passed into the task. */
+		3,/* Priority at which the task is created. */
+		&xHandle_Button_2_Monitor );      /* Used to pass out the created task's handle. */
+
+	if( xReturned != pdPASS )
+	{
+		/* The task was created.  Use the task's handle to delete the task. */
+		vTaskDelete( xHandle_Button_2_Monitor );
+	}
+	
+	xReturned = xTaskCreate(
+		vTaskCode_Periodic_Transmitter,       /* Function that implements the task. */
+		"Periodic_Transmitter",          /* Text name for the task. */
+		100,      /* Stack size in words, not bytes. */
+		( void * ) NULL,    /* Parameter passed into the task. */
+		2,/* Priority at which the task is created. */
+		&xHandle_Periodic_Transmitter );      /* Used to pass out the created task's handle. */
+
+	if( xReturned != pdPASS )
+	{
+		/* The task was created.  Use the task's handle to delete the task. */
+		vTaskDelete( xHandle_Periodic_Transmitter );
+	}
+
+	xReturned = xTaskCreate(
+		vTaskCode_Uart_Receiver,       /* Function that implements the task. */
+		"Uart_Receiver",          /* Text name for the task. */
+		100,      /* Stack size in words, not bytes. */
+		( void * ) NULL,    /* Parameter passed into the task. */
+		4,/* Priority at which the task is created. */
+		&xHandle_Uart_Receiver );      /* Used to pass out the created task's handle. */
+
+	if( xReturned != pdPASS )
+	{
+		/* The task was created.  Use the task's handle to delete the task. */
+		vTaskDelete( xHandle_Uart_Receiver );
+	}
+	
+	xReturned = xTaskCreate(
+		vTaskCode_Load_1_Simulation,       /* Function that implements the task. */
+		"Load_1_Simulation",          /* Text name for the task. */
+		100,      /* Stack size in words, not bytes. */
+		( void * ) NULL,    /* Parameter passed into the task. */
+		4,/* Priority at which the task is created. */
+		&xHandle_Load_1_Simulation );      /* Used to pass out the created task's handle. */
+
+	if( xReturned != pdPASS )
+	{
+		/* The task was created.  Use the task's handle to delete the task. */
+		vTaskDelete( xHandle_Load_1_Simulation );
+	}
+
+	xReturned = xTaskCreate(
+		vTaskCode_Load_2_Simulation,       /* Function that implements the task. */
+		"Load_2_Simulation",          /* Text name for the task. */
+		100,      /* Stack size in words, not bytes. */
+		( void * ) NULL,    /* Parameter passed into the task. */
+		2,/* Priority at which the task is created. */
+		&xHandle_Load_2_Simulation );      /* Used to pass out the created task's handle. */
+
+	if( xReturned != pdPASS )
+	{
+		/* The task was created.  Use the task's handle to delete the task. */
+		vTaskDelete( xHandle_Load_2_Simulation );
+	}
+    /* Create Tasks here */
+
+
+	/* Now all the tasks have been started - start the scheduler.
+
+	NOTE : Tasks run in system mode and the scheduler runs in Supervisor mode.
+	The processor MUST be in supervisor mode when vTaskStartScheduler is 
+	called.  The demo applications included in the FreeRTOS.org download switch
+	to supervisor mode prior to main being called.  If you are not using one of
+	these demo application projects then ensure Supervisor mode is used here. */
+	vTaskStartScheduler();
+
+	/* Should never reach here!  If you do then there was not enough heap
+	available for the idle task to be created. */
+	for( ;; );
+}
+
+/*-----------------------------------------------------------*/
+
+/* Task to be created. */
+void vTaskCode_Button_1_Monitor( void * pvParameters )
+{
+	/* The parameter value is expected to be 1 as 1 is passed in the
+	pvParameters value in the call to xTaskCreate() below. */
+	
+	xLastWakeTime_Button_1_Monitor = xTaskGetTickCount();
+	
+	for( ;; )
+	{
+		if( button1_port0_pin0 != GPIO_read(PORT_0, PIN0) )
+		{
+			button1_port0_pin0 = GPIO_read(PORT_0, PIN0);
+		}
+		
+		vTaskDelayUntil( &xLastWakeTime_Button_1_Monitor, xFrequency_Button_1_Monitor );
+	}
+}
+
+void vTaskCode_Button_2_Monitor( void * pvParameters )
+{
+	/* The parameter value is expected to be 1 as 1 is passed in the
+	pvParameters value in the call to xTaskCreate() below. */
+	
+	xLastWakeTime_Button_2_Monitor = xTaskGetTickCount();
+	
+	for( ;; )
+	{
+		if( button2_port0_pin1 != GPIO_read(PORT_0, PIN1) )
+		{
+			button2_port0_pin1 = GPIO_read(PORT_0, PIN1);
+		}
+		
+		vTaskDelayUntil( &xLastWakeTime_Button_2_Monitor, xFrequency_Button_2_Monitor );
+	}
+}
+
+void vTaskCode_Periodic_Transmitter( void * pvParameters )
+{
+	xLastWakeTime_Periodic_Transmitter = xTaskGetTickCount();
+	
+	for( ;; )
+	{
+		if(button1_port0_pin0 == PIN_IS_HIGH)
+		{
+			GPIO_write(PORT_0, PIN2, PIN_IS_HIGH);
+		}
+		else
+		{
+			GPIO_write(PORT_0, PIN2, PIN_IS_LOW);
+		}
+		
+		vTaskDelayUntil( &xLastWakeTime_Periodic_Transmitter, xFrequency_Periodic_Transmitter );
+	}
+}
+
+void vTaskCode_Uart_Receiver( void * pvParameters )
+{
+	xLastWakeTime_Uart_Receiver = xTaskGetTickCount();
+	
+	for( ;; )
+	{
+		if(button2_port0_pin1 == PIN_IS_HIGH)
+		{
+			GPIO_write(PORT_0, PIN3, PIN_IS_HIGH);
+		}
+		else
+		{
+			GPIO_write(PORT_0, PIN3, PIN_IS_LOW);
+		}
+		
+		vTaskDelayUntil( &xLastWakeTime_Uart_Receiver, xFrequency_Uart_Receiver );
+	}
+}
+
+void vTaskCode_Load_1_Simulation( void * pvParameters )
+{
+	xLastWakeTime_Load_1_Simulation = xTaskGetTickCount();
+	
+	for( ;; )
+	{
+		for(load1_count = 0;load1_count < 50; load1_count++){}
+		
+		vTaskDelayUntil( &xLastWakeTime_Load_1_Simulation, xFrequency_Load_1_Simulation );
+	}
+}
+
+void vTaskCode_Load_2_Simulation( void * pvParameters )
+{
+	xLastWakeTime_Load_2_Simulation = xTaskGetTickCount();
+	
+	for( ;; )
+	{
+		for(load2_count = 0;load2_count < 120; load2_count++){}
+		
+		vTaskDelayUntil( &xLastWakeTime_Load_2_Simulation, xFrequency_Load_2_Simulation );
+	}
+}
+
+/*-----------------------------------------------------------*/
+
+#endif
 
 /*-----------------------------------------------------------*/
 
