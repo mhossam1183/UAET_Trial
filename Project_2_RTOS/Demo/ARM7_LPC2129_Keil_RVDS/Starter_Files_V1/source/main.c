@@ -65,7 +65,7 @@
 #include "serial.h"
 #include "GPIO.h"
 
-#if ( configUSE_EDF_SCHEDULER == 1 ) /* EDF scheduler is used */
+#if ( configUSE_EDF_SCHEDULER == 1 ) /* Main Application when EDF scheduler is used */
 
 /*-----------------------------------------------------------*/
 
@@ -83,6 +83,7 @@
  */
 static void prvSetupHardware( void );
 
+/* tasks code prototypes */
 static void vTaskCode_Button_1_Monitor( void * pvParameters );
 static void vTaskCode_Button_2_Monitor( void * pvParameters );
 static void vTaskCode_Periodic_Transmitter( void * pvParameters );
@@ -91,14 +92,16 @@ static void vTaskCode_Load_1_Simulation( void * pvParameters );
 static void vTaskCode_Load_2_Simulation( void * pvParameters );
 /*-----------------------------------------------------------*/
 
+/* variables for use with GPIO pins */
 pinState_t button1_port0_pin0 = PIN_IS_LOW;
 pinState_t button2_port0_pin1 = PIN_IS_LOW;
 
-unsigned char load1_count = 0;
-unsigned char load2_count = 0;
+unsigned int load1_count = 0;
+unsigned int load2_count = 0;
 
 static BaseType_t xReturned = pdFAIL;
 
+/* tasks handlers */
 extern TaskHandle_t xHandle_Button_1_Monitor;
 extern TaskHandle_t xHandle_Button_2_Monitor;
 extern TaskHandle_t xHandle_Periodic_Transmitter;
@@ -125,6 +128,7 @@ int main( void )
 	prvSetupHardware();
 
 	/* Create the task, storing the handle. */
+	
 	xReturned = xTaskPeriodicCreate(
 		vTaskCode_Button_1_Monitor,       /* Function that implements the task. */
 		"Button_1_Monitor",          /* Text name for the task. */
@@ -132,7 +136,7 @@ int main( void )
 		( void * ) NULL,    /* Parameter passed into the task. */
 		4,/* Priority at which the task is created. */
 		&xHandle_Button_1_Monitor,      /* Used to pass out the created task's handle. */
-		50 );
+		50 ); /* Periodicity */
 
 	if( xReturned != pdPASS )
 	{
@@ -147,7 +151,7 @@ int main( void )
 		( void * ) NULL,    /* Parameter passed into the task. */
 		4,/* Priority at which the task is created. */
 		&xHandle_Button_2_Monitor,      /* Used to pass out the created task's handle. */
-		50 );
+		50 ); /* Periodicity */
 
 	if( xReturned != pdPASS )
 	{
@@ -162,7 +166,7 @@ int main( void )
 		( void * ) NULL,    /* Parameter passed into the task. */
 		1,/* Priority at which the task is created. */
 		&xHandle_Periodic_Transmitter,      /* Used to pass out the created task's handle. */
-		100 );
+		100 ); /* Periodicity */
 
 	if( xReturned != pdPASS )
 	{
@@ -177,7 +181,7 @@ int main( void )
 		( void * ) NULL,    /* Parameter passed into the task. */
 		1,/* Priority at which the task is created. */
 		&xHandle_Uart_Receiver,      /* Used to pass out the created task's handle. */
-		20 );
+		20 ); /* Periodicity */
 		
 	if( xReturned != pdPASS )
 	{
@@ -192,7 +196,7 @@ int main( void )
 		( void * ) NULL,    /* Parameter passed into the task. */
 		1,/* Priority at which the task is created. */
 		&xHandle_Load_1_Simulation,      /* Used to pass out the created task's handle. */
-		10 );
+		10 ); /* Periodicity */
 		
 	if( xReturned != pdPASS )
 	{
@@ -207,16 +211,14 @@ int main( void )
 		( void * ) NULL,    /* Parameter passed into the task. */
 		1,/* Priority at which the task is created. */
 		&xHandle_Load_2_Simulation,      /* Used to pass out the created task's handle. */
-		100 );
+		100 ); /* Periodicity */
 		
 	if( xReturned != pdPASS )
 	{
 		/* The task was created.  Use the task's handle to delete the task. */
 		vTaskDelete( xHandle_Load_2_Simulation );
 	}
-    /* Create Tasks here */
-
-
+    
 	/* Now all the tasks have been started - start the scheduler.
 
 	NOTE : Tasks run in system mode and the scheduler runs in Supervisor mode.
@@ -233,12 +235,8 @@ int main( void )
 
 /*-----------------------------------------------------------*/
 
-/* Task to be created. */
 void vTaskCode_Button_1_Monitor( void * pvParameters )
 {
-	/* The parameter value is expected to be 1 as 1 is passed in the
-	pvParameters value in the call to xTaskCreate() below. */
-	
 	for( ;; )
 	{
 		if( button1_port0_pin0 != GPIO_read(PORT_0, PIN0) )
@@ -252,9 +250,6 @@ void vTaskCode_Button_1_Monitor( void * pvParameters )
 
 void vTaskCode_Button_2_Monitor( void * pvParameters )
 {
-	/* The parameter value is expected to be 1 as 1 is passed in the
-	pvParameters value in the call to xTaskCreate() below. */
-	
 	for( ;; )
 	{
 		if( button2_port0_pin1 != GPIO_read(PORT_0, PIN1) )
@@ -298,13 +293,13 @@ void vTaskCode_Uart_Receiver( void * pvParameters )
 		taskYIELD();
 	}
 }
-void vTaskCode_Load_1_Simulation( void * pvParameters ){for( ;; ){for(load1_count = 0;load1_count < 50; load1_count++){}taskYIELD();}}
-void vTaskCode_Load_2_Simulation( void * pvParameters ){for( ;; ){for(load2_count = 0;load2_count < 120; load2_count++){}taskYIELD();}}
+void vTaskCode_Load_1_Simulation( void * pvParameters ){for( ;; ){for(load1_count = 0;load1_count < 10000; load1_count++){}taskYIELD();}}
+void vTaskCode_Load_2_Simulation( void * pvParameters ){for( ;; ){for(load2_count = 0;load2_count < 21000; load2_count++){}taskYIELD();}}
 
 #endif
 
 
-#if ( configUSE_EDF_SCHEDULER == 0 ) /* EDF scheduler is used */
+#if ( configUSE_EDF_SCHEDULER == 0 ) /* Main Application when EDF scheduler is used */
 
 /*-----------------------------------------------------------*/
 
@@ -322,6 +317,7 @@ void vTaskCode_Load_2_Simulation( void * pvParameters ){for( ;; ){for(load2_coun
  */
 static void prvSetupHardware( void );
 
+/* tasks code prototypes */
 static void vTaskCode_Button_1_Monitor( void * pvParameters );
 static void vTaskCode_Button_2_Monitor( void * pvParameters );
 static void vTaskCode_Periodic_Transmitter( void * pvParameters );
@@ -330,14 +326,16 @@ static void vTaskCode_Load_1_Simulation( void * pvParameters );
 static void vTaskCode_Load_2_Simulation( void * pvParameters );
 /*-----------------------------------------------------------*/
 
+/* variables for use with GPIO pins */
 pinState_t button1_port0_pin0 = PIN_IS_LOW;
 pinState_t button2_port0_pin1 = PIN_IS_LOW;
 
-unsigned char load1_count = 0;
-unsigned char load2_count = 0;
+unsigned int load1_count = 0;
+unsigned int load2_count = 0;
 
 static BaseType_t xReturned = pdFAIL;
 
+/* tasks handlers */
 extern TaskHandle_t xHandle_Button_1_Monitor;
 extern TaskHandle_t xHandle_Button_2_Monitor;
 extern TaskHandle_t xHandle_Periodic_Transmitter;
@@ -352,6 +350,7 @@ TaskHandle_t xHandle_Uart_Receiver = NULL;
 TaskHandle_t xHandle_Load_1_Simulation = NULL;
 TaskHandle_t xHandle_Load_2_Simulation = NULL;
 
+/* tasks first call time */
 static TickType_t xLastWakeTime_Button_1_Monitor;
 static TickType_t xLastWakeTime_Button_2_Monitor;
 static TickType_t xLastWakeTime_Periodic_Transmitter;
@@ -359,6 +358,7 @@ static TickType_t xLastWakeTime_Uart_Receiver;
 static TickType_t xLastWakeTime_Load_1_Simulation;
 static TickType_t xLastWakeTime_Load_2_Simulation;
 
+/* tasks periodicity */
 const TickType_t xFrequency_Button_1_Monitor = 50;
 const TickType_t xFrequency_Button_2_Monitor = 50;
 const TickType_t xFrequency_Periodic_Transmitter = 100;
@@ -378,6 +378,7 @@ int main( void )
 	prvSetupHardware();
 
 	/* Create the task, storing the handle. */
+	
 	xReturned = xTaskCreate(
 		vTaskCode_Button_1_Monitor,       /* Function that implements the task. */
 		"Button_1_Monitor",          /* Text name for the task. */
@@ -461,10 +462,8 @@ int main( void )
 		/* The task was created.  Use the task's handle to delete the task. */
 		vTaskDelete( xHandle_Load_2_Simulation );
 	}
-    /* Create Tasks here */
-
-
-	/* Now all the tasks have been started - start the scheduler.
+	
+    /* Now all the tasks have been started - start the scheduler.
 
 	NOTE : Tasks run in system mode and the scheduler runs in Supervisor mode.
 	The processor MUST be in supervisor mode when vTaskStartScheduler is 
@@ -483,17 +482,18 @@ int main( void )
 /* Task to be created. */
 void vTaskCode_Button_1_Monitor( void * pvParameters )
 {
-	/* The parameter value is expected to be 1 as 1 is passed in the
-	pvParameters value in the call to xTaskCreate() below. */
-	
 	xLastWakeTime_Button_1_Monitor = xTaskGetTickCount();
 	
 	for( ;; )
 	{
+		
+
 		if( button1_port0_pin0 != GPIO_read(PORT_0, PIN0) )
 		{
 			button1_port0_pin0 = GPIO_read(PORT_0, PIN0);
 		}
+		
+		
 		
 		vTaskDelayUntil( &xLastWakeTime_Button_1_Monitor, xFrequency_Button_1_Monitor );
 	}
@@ -501,9 +501,6 @@ void vTaskCode_Button_1_Monitor( void * pvParameters )
 
 void vTaskCode_Button_2_Monitor( void * pvParameters )
 {
-	/* The parameter value is expected to be 1 as 1 is passed in the
-	pvParameters value in the call to xTaskCreate() below. */
-	
 	xLastWakeTime_Button_2_Monitor = xTaskGetTickCount();
 	
 	for( ;; )
@@ -542,6 +539,8 @@ void vTaskCode_Uart_Receiver( void * pvParameters )
 	
 	for( ;; )
 	{
+		GPIO_write(PORT_0, PIN4, PIN_IS_HIGH);
+		
 		if(button2_port0_pin1 == PIN_IS_HIGH)
 		{
 			GPIO_write(PORT_0, PIN3, PIN_IS_HIGH);
@@ -550,6 +549,8 @@ void vTaskCode_Uart_Receiver( void * pvParameters )
 		{
 			GPIO_write(PORT_0, PIN3, PIN_IS_LOW);
 		}
+		
+		GPIO_write(PORT_0, PIN4, PIN_IS_LOW);
 		
 		vTaskDelayUntil( &xLastWakeTime_Uart_Receiver, xFrequency_Uart_Receiver );
 	}
@@ -561,7 +562,11 @@ void vTaskCode_Load_1_Simulation( void * pvParameters )
 	
 	for( ;; )
 	{
-		for(load1_count = 0;load1_count < 50; load1_count++){}
+		
+		
+		for(load1_count = 0;load1_count < 10000; load1_count++){}
+			
+		
 		
 		vTaskDelayUntil( &xLastWakeTime_Load_1_Simulation, xFrequency_Load_1_Simulation );
 	}
@@ -573,7 +578,11 @@ void vTaskCode_Load_2_Simulation( void * pvParameters )
 	
 	for( ;; )
 	{
-		for(load2_count = 0;load2_count < 120; load2_count++){}
+		
+		
+		for(load2_count = 0;load2_count < 21000; load2_count++){}
+			
+		
 		
 		vTaskDelayUntil( &xLastWakeTime_Load_2_Simulation, xFrequency_Load_2_Simulation );
 	}
@@ -615,6 +624,16 @@ void prvSetupHardware( void )
 
 	/* Setup the peripheral bus to be the same as the PLL output. */
 	VPBDIV = mainBUS_CLK_FULL;
+}
+
+void vApplicationIdleHook( void )
+{
+	;
+}
+
+void vApplicationTickHook( void )
+{
+	;
 }
 
 /*-----------------------------------------------------------*/
