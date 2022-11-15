@@ -293,8 +293,8 @@ void vTaskCode_Uart_Receiver( void * pvParameters )
 		taskYIELD();
 	}
 }
-void vTaskCode_Load_1_Simulation( void * pvParameters ){for( ;; ){for(load1_count = 0;load1_count < 10000; load1_count++){}taskYIELD();}}
-void vTaskCode_Load_2_Simulation( void * pvParameters ){for( ;; ){for(load2_count = 0;load2_count < 21000; load2_count++){}taskYIELD();}}
+void vTaskCode_Load_1_Simulation( void * pvParameters ){for( ;; ){for(load1_count = 0;load1_count < 9000; load1_count++){}taskYIELD();}}
+void vTaskCode_Load_2_Simulation( void * pvParameters ){for( ;; ){for(load2_count = 0;load2_count < 20000; load2_count++){}taskYIELD();}}
 
 #endif
 
@@ -539,7 +539,7 @@ void vTaskCode_Uart_Receiver( void * pvParameters )
 	
 	for( ;; )
 	{
-		GPIO_write(PORT_0, PIN4, PIN_IS_HIGH);
+		
 		
 		if(button2_port0_pin1 == PIN_IS_HIGH)
 		{
@@ -550,7 +550,7 @@ void vTaskCode_Uart_Receiver( void * pvParameters )
 			GPIO_write(PORT_0, PIN3, PIN_IS_LOW);
 		}
 		
-		GPIO_write(PORT_0, PIN4, PIN_IS_LOW);
+		
 		
 		vTaskDelayUntil( &xLastWakeTime_Uart_Receiver, xFrequency_Uart_Receiver );
 	}
@@ -564,7 +564,7 @@ void vTaskCode_Load_1_Simulation( void * pvParameters )
 	{
 		
 		
-		for(load1_count = 0;load1_count < 10000; load1_count++){}
+		for(load1_count = 0;load1_count < 9000; load1_count++){}
 			
 		
 		
@@ -578,11 +578,11 @@ void vTaskCode_Load_2_Simulation( void * pvParameters )
 	
 	for( ;; )
 	{
+		GPIO_write(PORT_0, PIN4, PIN_IS_HIGH);
 		
-		
-		for(load2_count = 0;load2_count < 21000; load2_count++){}
+		for(load2_count = 0;load2_count < 20000; load2_count++){}
 			
-		
+		GPIO_write(PORT_0, PIN4, PIN_IS_LOW);
 		
 		vTaskDelayUntil( &xLastWakeTime_Load_2_Simulation, xFrequency_Load_2_Simulation );
 	}
