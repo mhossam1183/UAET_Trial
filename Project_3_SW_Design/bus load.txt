@@ -1,0 +1,38 @@
+Regarding CAN bus load calculation, assuming standard CAN frame consist of below field.
+
+- Start-of-frame (1 bits): Denotes the start of frame transmission
+- Identifier (11 bits): unique identifier, also represents message priority
+- Remote transmission request (RTR) (1 bits): dominant (0) for data frames, and recessive (1) for request frames.
+- Identifier extension bit (IDE) (1 bits): It indicates standard CAN frame is being transmitted with no extension.
+- Reserved bit (r0) (1 bits): Must be dominant (0).
+- Data length code (DLC) (4 bits):  Number of bytes of data (0–8 bytes)
+- Data field (red) (0-64 bits): Data to be transmitted.
+- CRC (15 bits): Cyclic redundancy check
+- Bit stuffing is possible in some of the above fields around (18 bits) in the worst case.
+- CRC delimiter (1 bits): Must be recessive (1)
+- ACK slot (1 bits): Transmitter sends recessive (1) and any receiver can assert a dominant (0)
+- ACK delimiter (1 bits): Must be recessive (1)
+- End-of-frame (EOF) (7 bits): Must be recessive (1)
+- Inter-frame spacing (IFS) (3 bits): Must be recessive (1)
+
+So 1 CAN frame contains approximately 125 bit.
+
+Assuming we are using 500 kBit/s bit rate.
+
+bit time = 1 / bit rate = 1 / (500 * 1000) s = 0.002 ms
+
+This means 1 bit will take 0.002 ms to transfer on bus when using 500 kBit/s.
+
+So the time to transfer 1 frame carrying 125 bits is (0.002 ms/bit * 125 bit) = 0.25 ms.
+
+WCET (worst case execution time) analysis:
+
+utilization factor of one frame = transmission time * frequency = transmission time / Period
+
+Door state message will be sent every 10ms.
+Light switch state message will be sent every 20ms.
+Speed state message will be sent every 5ms.
+Assuming all 3 frames are identical i.e same transmission time (0.25 ms).
+
+Bus Load = summation of utilization factor for all frames =
+( 0.25 / 10 ) + ( 0.25 / 20 ) + ( 0.25 / 5 ) = 0.0875 = 8.75 %

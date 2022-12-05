@@ -1,0 +1,33 @@
+1. block diagram
+
+
+2. Static Design : Document .pdf (diagram + architecture + components & modules + APIs + typedefs + folder structure)
+	- Make the layered architecture
+	- Specify ECU components and modules
+	- Provide full detailed APIs for each module as well as a detailed description for the used typedefs
+	- Prepare your folder structure according to the previous points
+
+3. Dynamic Design : Document .pdf (  )
+	- Draw a state machine diagram for each ECU component
+	- Draw a state machine diagram for the ECU operation
+	- Draw the sequence diagram for the ECU
+	- Calculate CPU load for the ECU
+	- Calculate bus load in your system: With what percentage of system bus was busy per 1 second
+	
+	
+	
+	
+	Software requirements:
+
+1. ECU 1 will send status messages periodically to ECU 2 through the CAN protocol
+2. Status messages will be sent using Basic Communication Module (BCM)
+3. Door state message will be sent every 10ms to ECU 2
+4. Light switch state message will be sent every 20ms to ECU 2
+5. Speed state message will be sent every 5ms to ECU 2
+6. Each ECU will have an OS and application SW components
+7. If the door is opened while the car is moving -> Buzzer ON, Lights OFF
+8. If the door is opened while the car is stopped -> Buzzer OFF, Lights ON
+9. If the door is closed while the lights were ON -> Lights are OFF after 3 seconds
+10. If the car is moving and the light switch is pressed -> Buzzer OFF, Lights ON
+11. If the car is stopped and the light switch is pressed -> Buzzer ON, Lights ON
+

@@ -1,0 +1,7 @@
+WCET (worst case execution time) analysis:
+
+utilization factor of one frame = execution time * frequency = execution time / Period
+
+CPU Load = summation of utilization factor for all tasks =
+CPU Load for ECU 1 = ( 2 / 10 ) + ( 2 / 20 ) + ( 2 / 5 ) = 0.7 = 70 %
+CPU Load for ECU 2 = ( 2 / 10 ) + ( 2 / 20 ) + ( 2 / 5 ) + ( 1 / 5 ) = 0.9 = 90 %

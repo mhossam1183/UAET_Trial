@@ -1,0 +1,91 @@
+OS: Operating System: Configures and operates tasks in the system.
+
+- void OS_Init( void ): Initialize OS module and configure timers.
+- Std_Result Task_Create_periodic( uint8 * Handler, uint8 Stack_Size, uint8 Period, void (* Fun_callback)(void) ): create periodic task.
+- Std_Result Task_Delete( uint8 Handler): delete task.
+- void StartScheduler( void ): Start scheduling and dispatching tasks.
+
+
+BCM: Basic Communication Manager: Maintain signals for various communication protocols.
+
+- void BCM_Init( void ): Initialize BCM module.
+- Std_Result BCM_Create_Signal( uint8 * Handler, COM_Protocol_t cp_type, Dir_t Direction, uint8 Period, void (* Updater_callback)(uint32 * Payload)): create and configure new signal.
+- Std_Result BCM_Send_Signal(uint8 Handler): Send signal.
+- Std_Result BCM_Receive_Signal(uint8 Handler): Receive signal.
+
+
+VIM: Vehicle Infotainment Monitor: Monitor a group of sensors in the vehicle.
+
+- void VIM_Init(void): Initialize VIM module.
+- void VIM_DS_Callback(uint32 * Data): door sensor status callback.
+- void VIM_LS_Callback(uint32 * Data): light sensor status callback.
+- void VIM_SS_Callback(uint32 * Data): speed sensor status callback.
+
+
+DS_drv: Door Sensor Driver: Abstract DS data monitoring.
+
+- void DS_Init(void): Initialize DS_drv module.
+- void DS_Get_Data(uint32 * Data): Get door sensor status.
+
+
+LS_drv: Light Sensor Driver: Abstract LS data monitoring.
+
+- void LS_Init(void): Initialize LS_drv module.
+- void LS_Get_Data(uint32 * Data): Get light sensor status.
+
+
+SS_drv: Speed Sensor Driver: Abstract SS data monitoring.
+
+- void SS_Init(void): Initialize SS_drv module.
+- void SS_Get_Data(uint32 * Data): Get speed sensor status.
+
+
+GPIO: General Purpose Input/Outputs: Configure and interact with IO registers.
+
+- void Reg[XX]_Cfg(Dir_t Direction): Configure register [XX] as intput or output.
+- void Reg[XX]_Read(uint32 * Data): Read register [XX] value.
+- void Reg[XX]_Write(uint32 * Data): write register [XX] value.
+
+
+CAN_If: CAN Interface: Abstract CAN frame composition.
+
+- void CAN_If_Init(void): Initialize CAN_If module.
+- void CAN_If_Create_Message(uint8 * Handler): create new CAN message.
+- void CAN_If_Create_Signal(uint8 * Handler): create new CAN Signal.
+- void CAN_If_Cfg_Signal(uint8 * Message_Handler , uint8 * Signal_Handler): Configure CAN signal inside CAN frame.
+- Std_Result CAN_If_Transmit(uint8 * Signal_Handler, uint8 * Data, uint8 BuffSize): transmit signal.
+- Std_Result CAN_If_Receive(uint8 * Signal_Handler, uint8 * Data, uint8 BuffSize): Receive signal.
+
+
+CAN_drv: CAN driver: Configure and interact with CAN transceiver registers.
+
+- void CAN_Init(void): Initialize CAN_drv module.
+- void CAN_Set_Baudrate(uint32 Rate): Set CAN baud rate.
+- Std_Result CAN_Write(uint8 * Data, uint8 BuffSize): Write frame data to registers.
+- Std_Result CAN_Read(uint8 * Data, uint8 BuffSize): Write frame data to registers.
+
+
+VIO: Vehicle Infotainment Operator: Operates a group of audio visual warning signal in the vehicle.
+
+- void VIO_Init(void): Initialize VIO module.
+- void VIO_DS_Update(uint32 * Data): door sensor status update local value.
+- void VIO_LS_Update(uint32 * Data): light sensor status update local value.
+- void VIO_SS_Update(uint32 * Data): speed sensor status update local value.
+- void VIO_Main(void): Periodicaly evaluate sensor values and operate warnings accordingly.
+
+
+Bz_drv: Buzzer driver: Abstract Buzzer operation.
+
+- void Bz_Init(void): Initialize Bz_drv module.
+- void Bz_Set_Data(uint32 * Data): Set Buzzer ON or OFF.
+
+
+Li_drv: Lights driver: Abstract Lights operation.
+
+- void Li_Init(void): Initialize Li_drv module.
+- void Li_Set_Data(uint32 * Data): Set Lights ON or OFF.
+
+
+--------------------------------------------------------------
+
+
