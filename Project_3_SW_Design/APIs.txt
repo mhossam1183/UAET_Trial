@@ -1,25 +1,25 @@
 OS: Operating System: Configures and operates tasks in the system.
 
 - void OS_Init( void ): Initialize OS module and configure timers.
-- Std_Result OS_Task_Create_periodic( uint8 * Handler, uint8 Stack_Size, uint8 Period, void (* Fun_callback)(void) ): create periodic task.
-- Std_Result OS_Task_Delete( uint8 Handler): delete task.
+- Std_Result OS_Task_Create_periodic( uint8 * Task_Handler, uint8 Task_Stack_Size, uint8 Task_Period, void (* Task_Body_callback_fun)(void) ): create periodic task.
+- Std_Result OS_Task_Delete( uint8 Task_Handler): delete task.
 - void OS_StartScheduler( void ): Start scheduling and dispatching tasks.
 
 
 BCM: Basic Communication Manager: Maintain signals for various communication protocols.
 
 - void BCM_Init( void ): Initialize BCM module.
-- Std_Result BCM_Create_Signal( uint8 * Handler, COM_Protocol_t cp_type, Dir_t Direction, uint8 Period, void (* Updater_callback)(uint32 * Payload)): create and configure new signal.
-- Std_Result BCM_Send_Signal(uint8 Handler): Send signal.
-- Std_Result BCM_Receive_Signal(uint8 Handler): Receive signal.
+- Std_Result BCM_Create_Signal( uint8 * Signal_Handler, COM_Protocol_t cp_type, Dir_t Direction, uint8 Signal_Periodicity, void (* Signal_Updater_callback_fun), uint8 Payload_Size): create and configure new signal.
+- Std_Result BCM_Send_Signal(uint8 Signal_Handler, (uint32 * Payload_Data)): Send signal.
+- Std_Result BCM_Receive_Signal(uint8 Signal_Handler, (uint32 * Payload_Data)): Receive signal.
 
 
 VIM: Vehicle Infotainment Monitor: Monitor a group of sensors in the vehicle.
 
 - void VIM_Init(void): Initialize VIM module.
-- void VIM_DS_Callback(uint32 * Data): door sensor status callback.
-- void VIM_LS_Callback(uint32 * Data): light sensor status callback.
-- void VIM_SS_Callback(uint32 * Data): speed sensor status callback.
+- void VIM_DS_Callback(uint32 * status_Data): door sensor status callback.
+- void VIM_LS_Callback(uint32 * status_Data): light sensor status callback.
+- void VIM_SS_Callback(uint32 * status_Data): speed sensor status callback.
 
 
 DS_drv: Door Sensor Driver: Abstract DS data monitoring.
@@ -50,11 +50,11 @@ GPIO: General Purpose Input/Outputs: Configure and interact with IO registers.
 CAN_If: CAN Interface: Abstract CAN frame composition.
 
 - void CAN_If_Init(void): Initialize CAN_If module.
-- void CAN_If_Create_Message(uint8 * Handler): create new CAN message.
-- void CAN_If_Create_Signal(uint8 * Handler): create new CAN Signal.
+- void CAN_If_Create_Message(uint8 * Message_Handler): create new CAN message.
+- void CAN_If_Create_Signal(uint8 * Signal_Handler): create new CAN Signal.
 - void CAN_If_Cfg_Signal(uint8 * Message_Handler , uint8 * Signal_Handler): Configure CAN signal inside CAN frame.
-- Std_Result CAN_If_Transmit(uint8 * Signal_Handler, uint8 * Data, uint8 BuffSize): transmit signal.
-- Std_Result CAN_If_Receive(uint8 * Signal_Handler, uint8 * Data, uint8 BuffSize): Receive signal.
+- Std_Result CAN_If_Transmit(uint8 * Signal_Handler, uint8 * Payload_Data, uint8 Payload_Size): transmit signal.
+- Std_Result CAN_If_Receive(uint8 * Signal_Handler, uint8 * Payload_Data, uint8 Payload_Size): Receive signal.
 
 
 CAN_drv: CAN driver: Configure and interact with CAN transceiver registers.
@@ -68,9 +68,9 @@ CAN_drv: CAN driver: Configure and interact with CAN transceiver registers.
 VIO: Vehicle Infotainment Operator: Operates a group of audio visual warning signal in the vehicle.
 
 - void VIO_Init(void): Initialize VIO module.
-- void VIO_DS_Update(uint32 * Data): door sensor status update local value.
-- void VIO_LS_Update(uint32 * Data): light sensor status update local value.
-- void VIO_SS_Update(uint32 * Data): speed sensor status update local value.
+- void VIO_DS_Update(uint32 * status_Data): door sensor status update local value.
+- void VIO_LS_Update(uint32 * status_Data): light sensor status update local value.
+- void VIO_SS_Update(uint32 * status_Data): speed sensor status update local value.
 - void VIO_Main(void): Periodicaly evaluate sensor values and operate warnings accordingly.
 
 
