@@ -1,7 +1,23 @@
 WCET (worst case execution time) analysis:
 
 utilization factor of one frame = execution time * frequency = execution time / Period
+CPU Load = summation of utilization factor for all tasks
 
-CPU Load = summation of utilization factor for all tasks =
-CPU Load for ECU 1 = ( 2 / 10 ) + ( 2 / 20 ) + ( 2 / 5 ) = 0.7 = 70 %
-CPU Load for ECU 2 = ( 2 / 10 ) + ( 2 / 20 ) + ( 2 / 5 ) + ( 1 / 5 ) = 0.9 = 90 %
+Door state message will be sent by ECU_1 every 10ms to ECU_2.
+Light switch state message will be sent by ECU_1 every 20ms to ECU_2.
+Speed state message will be sent by ECU_1 every 5ms to ECU_2.
+
+In ECU 1, assuming tasks required to periodicaly send CAN status frames are identical
+& also assuming to have an execution time of (1 ms).
+
+CPU Load for ECU 1 = ( 1 / 10 ) + ( 1 / 20 ) + ( 1 / 5 ) = 0.35 = 35 %
+
+ECU_2 has a periodic task to call the "VIO_Main" API to evaluate sensor values and operate warnings accordingly.
+This task is called every (5 ms)
+
+In ECU 2, assuming tasks required to periodicaly receive CAN status frames are identical
+& also assuming to have an execution time of (1 ms).
+
+And Assuming the task, required to call the "VIO_Main" API, has an execution time of (2 ms).
+
+CPU Load for ECU 2 = ( 1 / 10 ) + ( 1 / 20 ) + ( 1 / 5 ) + ( 2 / 5 ) = 0.9 = 90 %
