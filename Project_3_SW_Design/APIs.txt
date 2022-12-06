@@ -88,4 +88,17 @@ Li_drv: Lights driver: Abstract Lights operation.
 
 --------------------------------------------------------------
 
+typedef enum 
+{
+  CAN = 0,
+  CAN_FD,
+  Ethernet,
+  Flexray,
+  Lin
+}COM_Protocol_t;
 
+typedef enum 
+{
+  Input = 0,
+  Output
+}Dir_t
