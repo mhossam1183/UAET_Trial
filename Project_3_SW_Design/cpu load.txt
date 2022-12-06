@@ -20,4 +20,4 @@ In ECU 2, assuming tasks required to periodicaly receive CAN status frames are i
 
 And Assuming the task, required to call the "VIO_Main" API, has an execution time of (2 ms).
 
-CPU Load for ECU 2 = ( 1 / 10 ) + ( 1 / 20 ) + ( 1 / 5 ) + ( 2 / 5 ) = 0.9 = 90 %
+CPU Load for ECU 2 = ( 1 / 10 ) + ( 1 / 20 ) + ( 1 / 5 ) + ( 2 / 5 ) = 0.75 = 75 %
