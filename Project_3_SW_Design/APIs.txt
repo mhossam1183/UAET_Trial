@@ -1,9 +1,9 @@
 OS: Operating System: Configures and operates tasks in the system.
 
 - void OS_Init( void ): Initialize OS module and configure timers.
-- Std_Result Task_Create_periodic( uint8 * Handler, uint8 Stack_Size, uint8 Period, void (* Fun_callback)(void) ): create periodic task.
-- Std_Result Task_Delete( uint8 Handler): delete task.
-- void StartScheduler( void ): Start scheduling and dispatching tasks.
+- Std_Result OS_Task_Create_periodic( uint8 * Handler, uint8 Stack_Size, uint8 Period, void (* Fun_callback)(void) ): create periodic task.
+- Std_Result OS_Task_Delete( uint8 Handler): delete task.
+- void OS_StartScheduler( void ): Start scheduling and dispatching tasks.
 
 
 BCM: Basic Communication Manager: Maintain signals for various communication protocols.
