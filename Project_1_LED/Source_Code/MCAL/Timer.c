@@ -42,7 +42,8 @@ void Timer_Init_GPT_Timer1A(void)
   /* GPTM Timer A is set to Periodic Timer mode */
   SET_BIT_FIELD_VALUE(GPTM_TIMER1_GPTMTAMR_R.R, 0x2);
   
-  /* Timer A Prescale & Interval Load are set for 1 second cycle */
+  /* Given that System Clock is configured to 16,000,000 Hz */
+	/* Timer A Prescale & Interval Load are configured to produce a 1 second delay */
   SET_BIT_FIELD_VALUE(GPTM_TIMER1_GPTMTAPR_R.R, ( 250 - 1 ));
   SET_BIT_FIELD_VALUE(GPTM_TIMER1_GPTMTAILR_R.R, ( 64000 - 1 ));
   

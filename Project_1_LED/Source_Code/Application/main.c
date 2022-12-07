@@ -4,14 +4,16 @@
 #include "../MCAL/Timer.h"
 #include "../HAL/Led.h"
 
+#define DUTY_CYCLE_START    0
+#define DUTY_CYCLE_END      5
+
 /* user function to be used as callback, for defining Timer exception handler */
 extern void TIMER1A_User_Activity(void);
 
-/* variable to carry user defined cycle time in seconds */
-static uint32_t user_cycle_Sec = 0;
-
 /* variable to control cycle resolution */
-static uint32_t cycle_count = 0;
+static uint8_t cycle_Count = 0;
+
+static uint8_t duty_Cycle_Match = 1;
 
 int main(void)
 {
@@ -23,10 +25,7 @@ int main(void)
   
   /* pass the user function as callback, to be assgined in the RAM vector table, in its correct index */
   Intr_Set_TIMER1A_CallBack(TIMER1A_User_Activity);
-  
-  /* set cycle time in seconds (must be greater than 0) */
-  FORCE_BIT_FIELD_VALUE(user_cycle_Sec, 3);
-  
+	
   /* Initialize GPTM "Timer 1 A" */
   Timer_Init_GPT_Timer1A();
   
@@ -40,15 +39,25 @@ int main(void)
 /* user function definition */
 void TIMER1A_User_Activity(void)
 {
-  /* operation to control cycle resolution */
-  //if((cycle_count % (user_cycle_Sec * 2)) == 0)
+  if(cycle_Count == DUTY_CYCLE_START)
   {
     /* Green LED toggle */
-    Led_Toggle();
+    Led_On();
+  }
+	
+  if(cycle_Count == duty_Cycle_Match)
+  {
+    /* Green LED toggle */
+    Led_Off();
   }
   
   /* increament control variable */
-  cycle_count++;
+  cycle_Count++;
+  
+  if(cycle_Count == DUTY_CYCLE_END)
+  {    
+    cycle_Count = 0;
+  }
   
   /* clear GPTM "Timer 1 A" Interrupt flag */
   Timer_Clear_Timer1A_Flag();
