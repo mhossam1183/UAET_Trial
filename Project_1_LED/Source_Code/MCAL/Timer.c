@@ -42,9 +42,9 @@ void Timer_Init_GPT_Timer1A(void)
   /* GPTM Timer A is set to Periodic Timer mode */
   SET_BIT_FIELD_VALUE(GPTM_TIMER1_GPTMTAMR_R.R, 0x2);
   
-  /* Timer A Prescale & Interval Load are set for 500 ms cycle */
-  SET_BIT_FIELD_VALUE(GPTM_TIMER1_GPTMTAPR_R.R, 0xFF);
-  SET_BIT_FIELD_VALUE(GPTM_TIMER1_GPTMTAILR_R.R, 0xFFFF);
+  /* Timer A Prescale & Interval Load are set for 1 second cycle */
+  SET_BIT_FIELD_VALUE(GPTM_TIMER1_GPTMTAPR_R.R, ( 250 - 1 ));
+  SET_BIT_FIELD_VALUE(GPTM_TIMER1_GPTMTAILR_R.R, ( 64000 - 1 ));
   
   /* Clear GPTM Timer A Time-Out Interrupt */
   SET_BIT_FIELD_VALUE(GPTM_TIMER1_GPTMICR_R.R, 0x1);

@@ -41,7 +41,7 @@ int main(void)
 void TIMER1A_User_Activity(void)
 {
   /* operation to control cycle resolution */
-  if((cycle_count % (user_cycle_Sec * 2)) == 0)
+  //if((cycle_count % (user_cycle_Sec * 2)) == 0)
   {
     /* Green LED toggle */
     Led_Toggle();
