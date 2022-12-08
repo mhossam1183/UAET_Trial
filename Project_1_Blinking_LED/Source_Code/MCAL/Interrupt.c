@@ -13,6 +13,8 @@
  *  INCLUDES
  *********************************************************************************************************************/
 #include "Interrupt.h"
+#include "../Libraries/Bit_Manipulation.h"
+#include "../MCAL/GPIO.h"
 
 /**********************************************************************************************************************
 *  LOCAL MACROS CONSTANT\FUNCTION
@@ -21,6 +23,8 @@
 #define SYSTICK_IRQ_NUMBER        15
 
 #define TIMER1A_IRQ_NUMBER        37
+
+#define GPIOF_IRQ_NUMBER        46
 
 /**********************************************************************************************************************
  *  LOCAL DATA 
@@ -95,6 +99,52 @@ void Intr_Set_SysTick_CallBack(void (* Fun_Handler)(void))
 void Intr_Set_TIMER1A_CallBack(void (* Fun_Handler)(void))
 {
   Vector_Table_RAM[TIMER1A_IRQ_NUMBER] = Fun_Handler;
+}
+
+/******************************************************************************
+* \Syntax          : void Intr_Set_GPIOF_Handler_CallBack(void (* Fun_Handler)(void))        
+* \Description     : pass the user function(for defining "GPIOF_Handler" exception handler) as callback,
+*                    to be assgined in the RAM vector table, in its correct IRQ index.                                    
+*                                                                             
+* \Sync\Async      : Asynchronous                                               
+* \Reentrancy      : Reentrant                                             
+* \Parameters (in) : None                     
+* \Parameters (out): None                                                      
+* \Return value:   : None                                  
+*******************************************************************************/
+void Intr_Set_GPIOF_Handler_CallBack(void (* Fun_Handler)(void))
+{
+  Vector_Table_RAM[GPIOF_IRQ_NUMBER] = Fun_Handler;
+}
+
+/******************************************************************************
+* \Syntax          : void Intr_Clear_GPIO_PF0_Flag(void)        
+* \Description     : clear "GPIO_PF0" Interrupt flag                                  
+*                                                                             
+* \Sync\Async      : Asynchronous                                               
+* \Reentrancy      : Reentrant                                             
+* \Parameters (in) : None                     
+* \Parameters (out): None                                                      
+* \Return value:   : None                                  
+*******************************************************************************/
+void Intr_Clear_GPIO_PF0_Flag(void)
+{
+  SET_BIT_FIELD_VALUE(GPIO_PORTF_GPIOICR_R.B.IC, GPIO_PF0_ENABLE);
+}
+
+/******************************************************************************
+* \Syntax          : void Intr_Clear_GPIO_PF4_Flag(void)        
+* \Description     : clear "GPIO_PF4" Interrupt flag                                  
+*                                                                             
+* \Sync\Async      : Asynchronous                                               
+* \Reentrancy      : Reentrant                                             
+* \Parameters (in) : None                     
+* \Parameters (out): None                                                      
+* \Return value:   : None                                  
+*******************************************************************************/
+void Intr_Clear_GPIO_PF4_Flag(void)
+{
+  SET_BIT_FIELD_VALUE(GPIO_PORTF_GPIOICR_R.B.IC, GPIO_PF4_ENABLE);
 }
 
 /**********************************************************************************************************************

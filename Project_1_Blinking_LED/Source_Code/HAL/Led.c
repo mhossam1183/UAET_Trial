@@ -56,7 +56,7 @@ void Led_Init_Green(void)
 void Led_On(void)
 {
   /* Set PF3 pin */
-  SET_BIT_FIELD_VALUE(GPIO_PORTF_GPIODATA_R.B.DATA, GPIO_PF3_ENABLE);
+  FORCE_BIT_FIELD_VALUE(GPIO_PORTF_GPIODATA_R.B.DATA, GPIO_PF3_ENABLE);
 }
 
 /******************************************************************************
@@ -72,7 +72,7 @@ void Led_On(void)
 void Led_Off(void)
 {
   /* clear PF3 pin */
-  SET_BIT_FIELD_VALUE(GPIO_PORTF_GPIODATA_R.B.DATA, 0x0);
+  FORCE_BIT_FIELD_VALUE(GPIO_PORTF_GPIODATA_R.B.DATA, LOW);
 }
 
 /******************************************************************************
