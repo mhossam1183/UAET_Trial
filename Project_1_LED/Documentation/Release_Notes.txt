@@ -1,7 +1,9 @@
 Blinking LED Project:
 ----------------------
-1. SysTick timer driver is implmented but not used.
+1. MCU System Clock is configured to 16,000,000 Hz.
 
-2. GPTM Timer Limitation due to difficulties in configuration: fixed cycle time (500 ms), and fixed duty cycle (50%).
+2. GPTM timer is configured to produce a 1 second delay.
 
-3. main.c Limitation: variable cycle time implemented using counter variables not the Timer itself.
+3. main.c Application: We have a cycle time of 5 seconds with variable duty cycle.
+   Each press on SW1 increases the ON time and decreases the OFF time.
+   While each press on SW2 decreases the ON time and increases the OFF time.
