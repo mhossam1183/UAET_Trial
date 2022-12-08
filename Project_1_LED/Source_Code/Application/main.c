@@ -1,3 +1,5 @@
+#if 0
+
 #include "../Libraries/STD_types.h"
 #include "../Libraries/Bit_Manipulation.h"
 #include "../MCAL/Interrupt.h"
@@ -27,7 +29,7 @@ int main(void)
   Intr_Set_TIMER1A_CallBack(TIMER1A_User_Activity);
 	
   /* Initialize GPTM "Timer 1 A" */
-  Timer_Init_GPT_Timer1A();
+  //Timer_Init_GPT_Timer1A();
   
   /* Super Loop */
   while(1)
@@ -62,3 +64,50 @@ void TIMER1A_User_Activity(void)
   /* clear GPTM "Timer 1 A" Interrupt flag */
   Timer_Clear_Timer1A_Flag();
 }
+
+#else
+
+/*PORTF PF0 and PF4 fall edge interrupt example*/
+/*This GPIO interrupt example code controls green LED with switches SW1 and SW2 external interrupts */
+
+//#include "TM4C123.h"                    // Device header
+
+#include "../Libraries/STD_types.h"
+#include "../Libraries/Bit_Manipulation.h"
+#include "../MCAL/Interrupt.h"
+#include "../MCAL/Timer.h"
+#include "../HAL/Led.h"
+#include "../HAL/Push_Button.h"
+#include "../MCAL/GPIO.h"
+
+int main(void)
+{
+      Led_Init_Green();
+	
+		Push_Button_Init();
+    
+    while(1)
+    {
+			// do nothing and wait for the interrupt to occur
+    }
+}
+
+/* SW1 is connected to PF4 pin, SW2 is connected to PF0. */
+/* Both of them trigger PORTF falling edge interrupt */
+void GPIOF_Handler(void)
+{	
+	
+
+  if (GPIO_PORTF_GPIOMIS_R.B.MIS & GPIO_PF4_ENABLE) /* check if interrupt causes by PF4/SW1*/
+    {   
+			Led_On();
+			SET_BIT_FIELD_VALUE(GPIO_PORTF_GPIOICR_R.B.IC, GPIO_PF4_ENABLE);
+     } 
+    else if (GPIO_PORTF_GPIOMIS_R.B.MIS & GPIO_PF0_ENABLE) /* check if interrupt causes by PF0/SW2 */
+    {  
+			Led_Off();
+			SET_BIT_FIELD_VALUE(GPIO_PORTF_GPIOICR_R.B.IC, GPIO_PF0_ENABLE);
+    }
+}
+
+#endif
