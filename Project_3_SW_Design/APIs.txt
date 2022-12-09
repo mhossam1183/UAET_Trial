@@ -357,6 +357,12 @@ typedef enum
 
 typedef enum 
 {
+  NOT_OK = 0,
+  OK
+}Std_Result;
+
+typedef enum 
+{
   Input = 0,
   Output
 }Dir_t
