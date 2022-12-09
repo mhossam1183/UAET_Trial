@@ -90,7 +90,7 @@ Return value    : None
 
 VIM_LS_Callback
 Syntax          : void VIM_LS_Callback(uint32 * status_Data)
-Description     : light sensor status callback.
+Description     : light switch sensor status callback.
 Parameters (in) : uint32 * status_Data: sensor status data
 Parameters (out): None
 Return value    : None
@@ -122,7 +122,7 @@ Return value    : None
 
 -----------------------------------------------------------------------------------------------------
 
-LS_drv: Light Sensor Driver: Abstract LS data monitoring.
+LS_drv: Light switch Sensor Driver: Abstract LS data monitoring.
 
 LS_Init
 Syntax          : void LS_Init(void)
@@ -133,7 +133,7 @@ Return value    : None
 
 LS_Get_Data
 Syntax          : void LS_Get_Data(uint32 * Data)
-Description     : Get light sensor status.
+Description     : Get light switch sensor status.
 Parameters (in) : uint32 * Data: sensor status data
 Parameters (out): None
 Return value    : None
@@ -160,7 +160,7 @@ Return value    : None
 
 GPIO: General Purpose Input/Outputs: Configure and interact with IO registers.
 
-the label "[XX]" denotes the different I/O registers belonging to various sensors (door , light, and speed)
+the label "[XX]" denotes the different I/O registers belonging to various sensors (door , light switch, and speed)
 , and various warning outputs (buzzer , and lights).
 
 Reg[XX]_Cfg
@@ -289,7 +289,7 @@ Return value    : None
 
 void VIO_LS_Update(uint32 * status_Data)
 Syntax          : void VIO_LS_Update(uint32 * status_Data)
-Description     : light sensor status update local value.
+Description     : light switch sensor status update local value.
 Parameters (in) : uint32 * status_Data: sensor status data.
 Parameters (out): None
 Return value    : None
