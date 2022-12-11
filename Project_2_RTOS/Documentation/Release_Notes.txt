@@ -1,0 +1,3 @@
+EDF Schedular Project:
+----------------------
+1. Current implementation of EDF schedular is not working, still debugging the issue.
